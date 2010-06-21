@@ -4,6 +4,7 @@ set nocompatible
 
 set nowrap
 set linebreak
+set showbreak=>\
 
 set history=1000
 
