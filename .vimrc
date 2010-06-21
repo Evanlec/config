@@ -243,7 +243,7 @@ autocmd FileType mail,human set formatoptions+=t textwidth=72
 " PHP
 let php_baselib = 1
 let php_folding = 1
-let php_sync_method = 3
+"let php_sync_method = 3
 let php_sql_query = 1
 autocmd FileType php set shiftwidth=4 softtabstop=4 tabstop=4
 "autocmd FileType php set noet
