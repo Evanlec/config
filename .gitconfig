@@ -1,0 +1,23 @@
+[user]
+	email = evanlec@gmail.com
+	name = Evan LeCompte
+[alias]
+	co = checkout
+[push]
+	default = current
+[gui]
+	recentrepo = /home/el/src/python/ray
+	recentrepo = /home/el/sellingarena
+[color]
+        branch = auto
+        diff = false
+        interactive = auto
+        status = auto
+[merge]
+        log = true
+[status]
+        showUntrackedFiles = no
+        relativePaths = false
+#[help]
+#        format = web
+#        browser = google-chrome
