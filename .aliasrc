@@ -79,7 +79,7 @@ alias simcity='WINEDEBUG=-all env WINEPREFIX="/home/${USER}/.wine" nice -20 wine
 # {{{ Vim aliases
 
 # vim aliases
-alias v='vim --remote-silent'
+alias v='vim'
 alias vp='vimpager'
 
 alias xorg="sudo vim /etc/X11/xorg.conf"
