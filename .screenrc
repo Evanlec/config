@@ -1,0 +1,44 @@
+bindkey -k k1 prev
+bindkey -k k2 next
+defutf8 on
+
+term xterm
+setenv LC_CTYPE en_US.UTF-8
+autodetach            on
+crlf                  off
+deflogin              on
+hardcopy_append       on
+msgwait 2 # 1 second messages
+activity "active: %n (%t) [%w:%s]"
+bell "bell: %n (%t) [%w:%s]^G"
+vbell_msg "[[[ ding ]]]"
+vbell off
+shell /bin/zsh
+hardstatus on
+hardstatus alwayslastline
+hardstatus string "%{.bW}%-w%{.rW}%n %t%{-}%+w %=%{..G} %H %{..Y} %m/%d %C%a "
+#hardstatus string "%w"
+#caption always "%{.bw}%-w%{.rw}%n %t%{-}%+w %-18=%{..y}%D %d-%M %c"
+
+startup_message off
+altscreen on
+
+
+defscrollback         10000
+silencewait           15
+#termcapinfo xterm ti@:te@
+#termcapinfo xterm*|Eterm|mlterm|rxvt 'hs:ts=\E]0;:fs=\007:ds=\E]0;screen\007'
+#hardstatus string "$USER@ H | #  |  t"
+
+attrcolor b ".I"
+defbce "on"
+termcapinfo rxvt-256color 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
+#termcapinfo xterm 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm' 
+#caption always "%{= kb}[%{kW} %2` | %3` %{b}][ %=%{w}%?%-Lw%?%{b}(%{W}%n*%f %t%?(%u)%?%{b})%{w}%?%+Lw%?%= %{b}][%{kB} %d.%m.%Y %{kW}%0c %{kb}]"
+
+#escape ``
+#bindkey -k F2 escape
+# vxp's copy to X buffer trick
+#bindkey -m > eval "stuff ' '" writebuf "exec sh -c 'xsel -b -i < /tmp/screen-exchange'"
+
+maptimeout 0

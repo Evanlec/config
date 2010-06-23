@@ -1,0 +1,195 @@
+#Aliases
+
+alias pts='/usr/bin/phoronix-test-suite'
+alias setpath='CDPATH=:..:~:~/projects'
+# Website projects
+alias art='cd /home/el/src/python/art'
+alias women='ssh admin@women -p 50100'
+alias wib='cd /home/el/src/python/women-in-business/wib'
+alias copper='cd /home/el/src/python/copper'
+alias course='cd /home/el/src/python/course'
+alias ray='ssh -p 40100 ray@192.168.2.3'
+alias coders='cd /home/el/src/python/coders'
+alias slice='ssh el@copper -p 50100'
+alias mountslice='sshfs -p 50100 -C -o BatchMode=yes copper:/home/el/src/python/ ~/slice '
+alias light='sudo /etc/rc.d/lighttpd'
+alias httpd='sudo /etc/rc.d/httpd'
+alias nginx='sudo /etc/rc.d/nginx'
+alias py='cd /home/el/src/python'
+alias jp='lftp -u safe,zone 65.175.237.243:421'
+alias items='cd /home/el/src/python/items'
+alias satchmo='cd /home/el/src/python/satchmo-trunk/satchmo'
+alias trade='cd /home/el/src/python/tradersnh'
+alias openx='cd /home/el/openx'
+alias recadin='cd /home/el/recadin'
+alias eye='cd /home/el/src/python/eye'
+alias sql='sudo /etc/rc.d/mysqld'
+alias fixopenx='sudo chmod -R a+w /home/el/openx/www/admin/plugins && sudo chmod -R a+w /home/el/openx/www/admin/plugins && sudo chmod -R a+w /home/el/openx/plugins'
+alias selling='cd /home/el/sellingarena/selling-arena.com/'
+alias selenium='ssh freelancerforge@selenium'
+alias router='ssh root@192.168.1.1'
+alias srf='cd /home/el/srf/'
+alias g='gvim --remote-silent'
+alias post='sudo /etc/rc.d/postgresql'
+alias weechat='weechat-curses'
+alias nfg='sudo netcfg2'
+alias :q='exit'
+alias nginx='sudo /etc/rc.d/nginx'
+alias nicotine='nicotine.py'
+alias diablo2='wine /home/el/.wine/drive_c/Program\ Files/Diablo\ II/Diablo\ II.exe'
+alias home2='wine /home/el/.wine/drive_c/Program\ Files/Sierra/Homeworld2/Bin/Release/Homeworld2.exe -nopbuffer'
+alias taskmgr='gnome-system-monitor'
+alias clyde='sudo clyde'
+# 
+
+# {{{ App Shortcuts
+alias startxdbg='rm awesome1 && startx > awesome1 2>&1' 
+alias lightscribe='/opt/lightscribeApplications/SimpleLabeler/./SimpleLabeler'
+alias mpdup='sudo mpdup'
+alias django='cd /home/el/src/python/django-trunk'
+# My cool diskusage command
+#alias diskusage='du -h --max-depth=1 -m | sort -n -r | vimpager'
+# }}}
+
+# {{{ Git Aliases
+alias gst='git status'
+alias gl='git pull'
+alias gp='git push'
+alias gd='git diff --color | vimpager'
+alias gc='git commit -v'
+alias gca='git commit -v -a'
+alias gb='git branch --color'
+alias gba='git branch -a'
+alias gg='git log -p --color'
+alias gs='git status'
+alias ga='git add'
+alias git-diff='git diff --color | vimpager'
+# }}}
+
+# {{{ WINE Aliases
+alias starcraft='wine /home/el/.wine/drive_c/Program\ Files/Starcraft/StarCraft.exe'
+alias flash='wine /home/el/.wine/drive_c/Program\ Files/Macromedia/Flash\ 8/Flash.exe'
+alias civ4="wine /home/el/.wine/drive_c/Program\ Files/Firaxis\ Games/Sid\ Meier\'s\ Civilization\ 4/Beyond\ The\ Sword/Civ4BeyondSword.exe"
+alias ccna='wine /home/el/.wine/drive_c/CCNA/QueLocalware.exe'
+alias photoshop='wine /home/el/.wine/drive_c/CS2/Photoshop.exe'
+alias galciv='wine /home/el/.wine/drive_c/GalCiv2/Twilight/GC2TwilightOfTheArnor.exe'
+alias simcity='WINEDEBUG=-all env WINEPREFIX="/home/${USER}/.wine" nice -20 wine /home/el/.wine/drive_c/Program\ Files/Maxis/SimCity\ 4\ Deluxe/Apps/SimCity\ 4.exe -d:opengl -intro:off'
+# }}}
+
+# {{{ Vim aliases
+
+# vim aliases
+alias v='vim --remote-silent'
+alias vp='vimpager'
+
+alias xorg="sudo vim /etc/X11/xorg.conf"
+alias rc='sudo vim /etc/rc.conf'
+alias xde='vim ~/.Xdefaults'
+alias fonts='vim ~/.fonts.conf'
+alias aw='vim ~/.config/awesome/rc.lua'
+alias sv='sudo vim'
+alias svd='sudo vim -d'
+alias vd='vim -d'
+alias rc='sudo vim /etc/rc.conf'
+alias xi='vim /home/el/.xinitrc'
+alias zshrc='vim /home/el/.zshrc'
+alias zalias='vim /home/el/.aliasrc'
+alias zfunc='vim /home/el/.zsh/function'
+alias fstab='sudo vim /etc/fstab'
+# }}}
+
+# {{{ Sudo Commands
+alias s='sudo'
+alias reboot='sudo reboot'
+alias shutdown='sudo shutdown -hP now'
+
+
+# What harm can mount/umount do?
+alias mount='sudo mount'
+alias umount='sudo umount'
+# }}}
+
+# {{{ Net Config Alias
+alias ifconfig='sudo ifconfig'
+alias iwconfig='sudo iwconfig'
+alias aireplay-ng='sudo aireplay-ng'
+alias airmon-ng='sudo airmon-ng'
+alias airodump-ng='sudo airodump-ng'
+alias ping='sudo ping'
+alias iwlist='sudo iwlist'
+alias iwpriv='sudo iwpriv'
+alias updatedb='sudo updatedb'
+alias scan='sudo iwlist rausb0 scan'
+alias netcfg2='sudo netcfg2'
+alias netstart='sudo /etc/rc.d/network restart'
+alias traceroute='sudo traceroute'
+alias hcitool='sudo hcitool'
+alias watch_wifi0='watch -n 0.5 iwconfig wifi0'
+# }}}
+
+# {{{ SAMBA mounts
+alias mountwin='sudo mount -t cifs \\\\192.168.2.100\\Documents /mnt/smb'
+alias mountphoto='sudo mount -t cifs \\\\192.168.1.139\\AA\ photo\ dump /mnt/smb'
+# }}}
+
+# {{{ RDP Connections
+alias rdp-gstiles='rdesktop -u Gary -p - -g 1280x1024 -x l Xp_One'
+# }}}
+
+# {{{ shell shortcuts
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .....='cd ../../../..'
+
+alias l='ls --group-directories-first'
+alias ll='ls -lFh'
+alias la='ls -a --group-directories-first'
+alias lt='ls -lht --group-directories-first' # List sorted by modification time
+alias ls='ls --color=auto --group-directories-first'
+alias lsa='ls -ld .*' # List only dot files
+alias d='dirs -v'
+alias mv='mv -v'
+alias cp='cp -rpv'
+alias e='exit'
+alias rmf='sudo rm -rf'
+# }}}
+
+# {{{ Pacman aliases
+alias mirror='sudo vim /etc/pacman.d/mirrorlist'
+alias pacman='sudo pacman'
+alias pacsearch='pacman -Ss'
+alias pacup='sudo pacman -Syu'
+alias pac='sudo pacman'
+alias p='sudo pacman'
+alias pi='sudo pacman -Qi'
+alias prd='sudo pacman -Rd'
+alias prs='sudo pacman -Rs'
+alias pl='sudo pacman -Ql'
+
+# }}}
+
+# {{{ Misc
+alias go='startxdbg'
+alias startx='startx --dpi 96 -nolisten udp -deferglyphs 16'
+#alias weather='weatherget -s 03046 --standard'
+alias c='cd'
+alias exit='clear; exit'
+alias e815='00:14:9A:11:3A:EE'
+alias plantronics='00:03:89:49:0B:41'
+alias wanip="curl -s checkip.dyndns.org | grep -Eo '[0-9\.]+'"
+alias locate='locate -i'
+alias updatefonts='sudo fc-cache -vf'
+alias xp='xprop | grep "WM_WINDOW_ROLE\|WM_CLASS" && echo "WM_CLASS(STRING) = \"NAME\", \"CLASS\""'
+#blank the monitors
+alias blank='xset dpms force standby'
+
+# }}}
+
+# <-------------- End Alias ----------------->
+
+alias lite='cd /home/el/src/python/lite'
+alias nethack='telnet nethack.alt.org'
+alias elec='cd /home/el/src/python/elecompte'
+alias blog='cd /home/el/src/python/blog'
+alias war3='wine /home/el/.wine/drive_c/Program\ Files/Warcraft\ III/war3.exe'
