@@ -1,0 +1,17 @@
+#!/bin/sh
+# Simple script run at login time to determine if screen+weechat is running, and if not, to start it
+# Written by Evan LeCompte
+
+wchat_screen=`screen -ls | grep weechat`
+
+#echo $num_screens
+
+#determine if screen+weechat is already running
+if [[ -n "$wchat_screen" ]]
+then # if yes then reconnect screen session
+	urxvt -g 80x30+0+0 -e screen -r weechat
+else # no screen+weechat running, start new screen session running weechat
+	urxvt -g 80x30+0+0 -e screen -S weechat weechat
+fi
+
+exit 0

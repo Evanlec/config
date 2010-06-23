@@ -1,0 +1,370 @@
+#!/bin/bash
+#tsalsa
+#tsalsa collects PC and alsa info to assist in sound problem diagnosics
+#################################################################################
+#Copyright (C) 2007 gnubien   contact: memo gnubien at freenode.net.
+
+#This program is free software; you can redistribute it and/or modify
+#it under the terms of the GNU General Public License as published by
+#the Free Software Foundation; either version 2 of the License, or
+#(at your option) any later version.
+
+#This program is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#GNU General Public License for more details.
+
+#You should have received a copy of the GNU General Public License
+#along with this program; if not, write to the Free Software
+#Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+##################################################################################
+vers="2008-07-15"
+dialg=$(which dialog 2>/dev/null | sed 's|^[^/]*||' 2>/dev/null);
+[[ -x "$dialg" ]]&& {
+dialog --title " tsalsa version 4.4" --yesno "TroubleShooting ALSA (tsalsa) collects PC and\nalsa info to assist in sound problem diagnostics;\nposts the info to nopaste.com or pastebin.ca and\nprints the url of the post for easy pasting.\n Answer yes to run tsalsa. " 0 0
+faildialg=$?
+[[ $faildialg = "1" ]]&& echo "exiting tsalsa" && exit 0; }
+[[ -x "$dialg" ]]&& {
+dialog --title "NOTICE" --yesno "The answers to these questions are needed to trouble shoot alsa problems.\nMake your choice with the arrow keys;\nSelect the choice with the spacebar;\nthen Select the Yes or OK button with the arrow keys\nand press Enter;\nSelect Yes to continue.\nAnswer NO or leave it blank if you do NOT know the answer." 20 60
+dialog --title "Surround Sound System" --inputbox "Is a surround sound speaker system plugged into your sound card? Answer: [yes OR no]" 20 80 2> /tmp/tsalsa.surr
+spdifz="$(cat /tmp/tsalsa.surr)";
+dialog --title "Alsa Model Options" --inputbox "Have you tried any model options\nwhen loading your sound module?\nAnswer: [yes OR no]\nAnswer no if you do not know what a model option is." 20 80  2> /tmp/tsalsa.model
+model="$(cat /tmp/tsalsa.model)";
+dialog --title "Number of plugs for the sound card" --inputbox "What is the total number of jacks that can be plugged into your sound card? Answer: [0,1,2,3,4,5,6,7]" 20 80 2> /tmp/tsalsa.plugz
+plugz="$(cat /tmp/tsalsa.plugz)";
+dialog --title "Speakers connected to soundcard" --inputbox "What is the total number of Speakers connected to soundcard?   Examples: [0,1,2,3,4,5,6,7,8,9]" 20 80  2> /tmp/tsalsa.spkr
+num="$(cat /tmp/tsalsa.spkr)";
+dialog --title "Digital Receiver Use" --inputbox "Are you using a digital receiver to power the speakers?\nfor your sound card?\nAnswer NO if you do not know what a digital receiver is. Answer: [yes OR no]" 20 80 2> /tmp/tsalsa.ext
+ext="$(cat /tmp/tsalsa.ext)";
+dialog --title "Linux Install type" --inputbox "Is your installed linux Distribution an upgrade from a precious version? Answer: [yes OR no]" 20 80 2> /tmp/tsalsa.distro
+fresh="$(cat /tmp/tsalsa.distro)";
+dialog --title "PC Type" --inputbox "Is your PC a desktop or laptop PC? Answer: [desktop OR laptop]" 20 80 2> /tmp/tsalsa.type
+pctype="$(cat /tmp/tsalsa.type)";
+dialog --title "PC age" --inputbox "How old is your PC?   Examples: [1 week, 2 months, 3 years]" 20 80 2> /tmp/tsalsa.input
+pcold="$(cat /tmp/tsalsa.input)";
+dialog --title "PC Make and Model" --inputbox "This info is needed by Alsa for its model options;\nEnter make and model number for your laptop, desktop or motherboard\nEnter your PC make and model number here: " 20 80 2> /tmp/tsalsa.pcmake
+dt="$(cat /tmp/tsalsa.pcmake)";
+clear;
+dialog --title "Sound Problem Description" --inputbox "Enter 100 words or less if possible\nCopy and paste ok here.\nEnter Sound Problem here:" 20 80 2> /tmp/tsalsa.prob
+pcprob=$(cat /tmp/tsalsa.prob);
+clear;
+ }
+[[ "$dialg" = "" ]]&& {
+echo "TroubleShooting ALSA (tsalsa) collects PC and"                                                      
+echo "alsa info to assist in sound problem diagnostics;"                                                  
+echo "posts the info to nopaste.com or pastebin.ca and"                                                   
+echo "prints the url of the post for easy pasting."                                                       
+read -n 1 -p "run tsalsa now? [y/n]: " runit                                                              
+echo                                                                                                      
+[[ "$runit" = "n" ]]&& echo " exiting tsalsa script" && exit 0            
+echo "NOTICE: The answers to these questions are needed by alsa for its model options;"
+echo "If you do not know the answer to a question then answer n or no";
+read -n 1 -p " Is a Surround Sound Speaker System plugged into your sound card? [y/n]: " spdifz
+echo
+clear
+echo "Answer no if you do not know what a alsa model option is;"
+read -n 1 -p " Have you tried any alsa model options when loading sound module? [y/n]: " model
+echo
+clear
+read -n 1 -p " Is your PC a laptop? [y/n]" lap
+echo
+clear
+read -p " Enter your make and model number for your laptop, desktop or motherboard [example: aces p9m99-m9]: " dt1
+echo
+clear
+echo "An example of a plug is where you connect a microphone jack into the soundcard;"
+read -n 1 -p " What is the total number of jacks that can be plugged into your soundcard? [examples: 0,1,2,3,5,6] " plugz
+echo
+clear
+read -n 1 -p " Total number of speakers connected to the sound card? [examples: 0,1,2,6,8,10]: " num
+echo
+clear
+echo "Answer no if you do not know what a digital receiver is;"
+read -n 1 -p " Are your sound card's speakers powered by a digital receiver? [y/n]: " ext
+echo
+clear
+echo "Enter 6 lines or less if possible; copy and paste is ok here; press Enter when finished;"
+read -p "Describe your sound problem: " prob
+echo
+echo "Is your installed linux Distribution an upgrade from a previous version?"
+read -p "Answer [yes OR no]: " gradup
+echo
+echo "How old is your PC?   Examples: [1 week, 2 months, 3 years]"
+read -p "Enter you PC's age here:  " oldpc
+echo
+clear; }
+prog=0
+[[ "$secondz" = "" ]]&& secondz="$SECONDS"
+spinnr() { 
+( 
+plus="0"
+while true
+do 
+[[ "$prog" -eq "0" ]]&& {
+pss=`ps ax`; grp=`echo "$pss" |grep "bash ./tsalsa" |head -1 |awk '{print $1}'`
+[[ "$grp" = "" ]]&& exit; }
+sleep .25
+pss1=`ps ax`; grp1=`echo "$pss1" |grep "$grp"`
+[[ "$secondz" != "" ]]&& runtime="$(($SECONDS-$secondz))" && sec="$runtime"
+[[ "$runtime" -lt "61" ]]&& {
+[[ $(echo "$pss1" |grep -s "$grp") ]]||break
+echo -n "Uploading /tmp/tsalsa.txt: [--------------------------------------------------] 0 Seconds" > /tmp/tsalsa.pbar
+for z in $(seq 0 300); do pct="$z"; [[ "$pct" -gt "0" ]] && [[ "$pct" -lt "301" ]]&& {
+[[ "$pct" -ne "0" ]]&& div="$pct"; r=".$(($((pct%5))*2))";
+[[ "$pct" -gt "0" ]] && [[ "$pct" -lt "51" ]]&& div="$pct";
+[[ "$pct" -gt "50" ]] && [[ "$pct" -lt "101" ]]&& div="$((pct-50))";
+[[ "$pct" -gt "100" ]] && [[ "$pct" -lt "151" ]]&& div="$((pct-100))";
+[[ "$pct" -gt "150" ]] && [[ "$pct" -lt "201" ]]&& div="$((pct-150))";
+[[ "$pct" -gt "200" ]] && [[ "$pct" -lt "251" ]]&& div="$((pct-200))";
+[[ "$pct" -gt "250" ]] && [[ "$pct" -lt "300" ]]&& div="$((pct-250))";
+[[ "$pct" -ne "0" ]]&& hashnum="$(for i in $(seq 1 $div); do echo -n "#"; done)";
+[[ "$pct" -ne "0" ]]&& dashnum="$(for i in $(seq 1 $div); do echo -n "-"; done)"; 
+for c in $(seq 1 92); do echo -en "\b"; done; pct1="$((pct/5))$r";
+[[ "$pct" -gt "0" ]] && [[ "$pct" -lt "301" ]] && [[ $(echo "$pss1" |grep -s "$grp") ]]&& {  
+sed 's/. Seconds/'"$pct1"' Seconds/;s/'"$dashnum"'/'"$hashnum"'/' /tmp/tsalsa.pbar; };
+[[ $(echo "$pss1" |grep -s "$grp") ]]||break && echo "" && exit
+sleep .2; } ; done; echo
+[[ "$runtime" -gt "60" ]]&& {
+echo ""
+echo "The attempt to upload /tmp/tsalsa to a pastebin site has exceeded 60 seconds;"
+echo "pastebin.ca or nopaste.com may be down temporarily; upload /tmp/tsalsa.txt to a pastebin site;"
+echo "then copy/paste the pastebin url in #alsa; here is a list of pastebin sites:"
+echo "http://nopaste.com    http://rafb.net http://nopaste.info    http://pastie.caboo.se"
+echo "http://paste.geeknode.org    http://pastebin.co.uk     http://paste.stgraber.org"
+echo "http://paste.husk.org    http://pastebin.4programmers.net"
+echo "tsalsa stopped"
+echo ""
+#wait;
+kill -9 "$grp"
+echo "kill grp"
+exit; }
+}
+prog=1
+done 
+) &
+};
+lsm=$(lsmod |grep '^snd \|soundcore' |sed 's/,/\n      /g' 2>/dev/null);
+lsp="$(which lspci 2>/dev/null| sed 's|^[^/]*||' |sed 's/^/\t/' 2>/dev/null )";
+crl="$(which curl 2>/dev/null| sed 's|^[^/]*||' |sed 's/^/\t/' 2>/dev/null)";
+wgt="$(which wget 2>/dev/null| sed 's|^[^/]*||' |sed 's/^/\t/' 2>/dev/null)";
+codec=$(cat /proc/asound/card0/codec*/*[^regs] 2>/dev/null |sed -n '1,4p'|sed 's/^/      /' 2>/dev/null);
+codechda=$(grep -is codec '/proc/asound/card0/codec#0' |sed 's/^/\t/');
+distro=`grep -ihs "buntu\|SUSE\|Fedora\|PCLinuxOS\|MEPIS\|Mandriva\|Debian\|Damn\|Sabayon\|Slackware\|KNOPPIX\|Gentoo\|Zenwalk\|Mint\|Kubuntu\|FreeBSD\|Puppy\|Freespire\|Vector\|Dreamlinux\|CentOS\|Arch\|Xandros\|Elive\|SLAX\|Red\|BSD\|KANOTIX\|Nexenta\|Foresight\|GeeXboX\|Frugalware\|64\|SystemRescue\|Novell\|BackTrack\|KateOS" /etc/{issue,*release,*version}`;
+dist="$(echo "$distro" |sed 's: \\.*::')";
+#dist=`echo "$distro" |sed -e ':b; N; s/\n//; bb' |sed 's/\\[rnl].*//'`;
+#dist=`echo "$distro" |sed -e ':b; N; s/\n//; bb' |sed 's/) .*$/\)/g' |sed 's/\\[rnl].*//'`;
+releas2="$(cat /proc/sys/kernel/osrelease)"
+releas=$(ls /etc/*release |awk -F'/' '{print $3}');
+opsys=$(uname -a);
+aver=$(cat /proc/asound/version |head -n1|awk {'print $7'} |sed 's/\.$//');
+alib=$(grep -s VERSION_STR /usr/include/alsa/version.h 2>/dev/null|awk {'print $3'}|sed 's/"//g');
+autil=$(amixer -v |awk {'print $3'});
+afilz=$(grep -cs "options snd.*index=" /etc/* 2>/dev/null |sed -n '/[1-99]$/p' |sed 's/^/\t/');
+amod=$(cat /proc/asound/modules|awk '{print $2}');
+acards=$(cat /proc/asound/cards |sed 's/^/\t/');
+alsp=$(lspci |grep -is "multi\|audio\|040[0-3]" |sed 's/^/\t/');
+aso=$(ls -l /home/$USER/.asoundrc 2>/dev/null);
+asc=$(ls -l /etc/asound.conf 2>/dev/null);
+lso=$(lsof /dev/dsp* /dev/snd/* |sed 's/^/\t/' 2>/dev/null);
+venid=`lspci -vn |grep 040[1-3] | awk -F':' '{print $3}'|awk {'print substr($0, 2)}'`;
+devid=`lspci -vn |grep 040[1-3] | awk -F':' '{print $4}'|awk {'print $1'}`;
+lspvn=$(lspci -vn 2>/dev/null);
+testvinid=$(echo "$venid" |awk 'END{print NR}');
+if [ "$testvinid" -eq "1" 2>/dev/null ]
+then
+fcard=$(grep "pci:v0000"$venid"d0000"$devid"" /lib/modules/$(uname -r)/modules.alias);
+else
+fcard="multiple cards listed in lspci"
+fi;
+echo "tsalsa version $vers $(date)" > /tmp/tsalsa.txt;
+[[ -n "$pcprob" ]]&& echo "Problem: $pcprob" >> /tmp/tsalsa.txt; echo "" >> /tmp/tsalsa.txt;
+[[ -n "$prob" ]]&& echo "Problem: $prob" >> /tmp/tsalsa.txt; echo "" >> /tmp/tsalsa.txt;
+[[ -n "$dt" ]]&& {
+echo -n "PC type/make/model:  " >> /tmp/tsalsa.txt;
+[[ "$pctype" != "" ]]&& echo "        $pctype : $dt" >> /tmp/tsalsa.txt;
+} #echo "" >> /tmp/tsalsa.txt; }
+[[ "$dt1" != "" ]]&& {
+[[ "$lap" = "y" ]]&& echo "       Laptop: $dt1" >> /tmp/tsalsa.txt;
+[[ "$lap" = "n" ]]&& echo "       Desktop: $dt1" >> /tmp/tsalsa.txt;
+} #echo "" >> /tmp/tsalsa.txt; }
+[[ -z "$dt" ]]&&[[ -z "$dt1" ]]&& { 
+echo "..laptop/desktop/motherboard info is needed by alsa for model options; what is your PC's make and model?" >> /tmp/tsalsa.txt;
+}
+echo "        Plugs: $plugz " >> /tmp/tsalsa.txt;                                     
+echo "        Surround sound system: $spdifz" >> /tmp/tsalsa.txt;                                                         
+echo "        Model options: $model" >> /tmp/tsalsa.txt;
+echo "        Number of speakers: $num " >> /tmp/tsalsa.txt;                                                   
+[[ "$ext" = "yes" ]]||[[ "$ext" = "y" ]]&& {
+echo "        Digital receiver: $ext " >> /tmp/tsalsa.txt;
+echo "" >> /tmp/tsalsa.txt; }
+echo "        Linux install is an upgrade from a previous version: $fresh $gradup" >> /tmp/tsalsa.txt;
+echo "        PC age (approximate): $pcold $oldpc" >> /tmp/tsalsa.txt;
+echo -n "        Groups: user is in these groups: " >> /tmp/tsalsa.txt;
+[[ $distro = "Fedora" ]]&& groups |sed -ne 's/.*\(users\).*/\1/p' >> /tmp/tsalsa.txt;
+groups |sed -ne 's/.*\(audio\).*/\1/p' >> /tmp/tsalsa.txt;
+hrdwaremix="$(cat /proc/asound/card0/pcm0p/info |grep subdevices_count)"
+echo -n "        Hardware Mixing: enabled if count is greater than 1: $hrdwaremix" >> /tmp/tsalsa.txt;
+echo "" >> /tmp/tsalsa.txt;
+echo "" >> /tmp/tsalsa.txt;
+echo -n "Distro: " >> /tmp/tsalsa.txt;
+echo "$dist" >> /tmp/tsalsa.txt; echo "" >> /tmp/tsalsa.txt;
+echo -n "Release: " >> /tmp/tsalsa.txt
+echo "$releas" >> /tmp/tsalsa.txt; echo "$releas2" >> /tmp/tsalsa.txt;
+echo -n "System: " >> /tmp/tsalsa.txt;
+echo "$(echo $opsys |sed '/i686/s/ 2007 / 2007\n       /' 2>/dev/null)" >> /tmp/tsalsa.txt; echo "" >> /tmp/tsalsa.txt;
+echo "Vendor/dev id: " >> /tmp/tsalsa.txt;
+echo "        $venid $devid" >> /tmp/tsalsa.txt; echo "" >> /tmp/tsalsa.txt;
+echo "Vendor/dev module: " >> /tmp/tsalsa.txt;
+echo "      $fcard" >> /tmp/tsalsa.txt; echo "" >> /tmp/tsalsa.txt;
+if [ "$testvinid" -eq "1" 2>/dev/null ]
+then
+vendev=$(lspci -vn |grep 040[1-3] |awk '{print $3}');
+echo -n "Vendor/device: $vendev" >> /tmp/tsalsa.txt;
+lspci -v -d "$vendev" |grep Subsystem: |sed 's/\t/ /' >> /tmp/tsalsa.txt; echo "" >> /tmp/tsalsa.txt;
+fi;
+echo "Lspci info: " >> /tmp/tsalsa.txt;
+echo "      $alsp" >> /tmp/tsalsa.txt; echo "" >> /tmp/tsalsa.txt;
+echo -n "Alsa driver: " >> /tmp/tsalsa.txt;
+echo "$aver" >> /tmp/tsalsa.txt;
+[[ $alib != "" ]]&& {
+echo -n "Alsa lib: " >> /tmp/tsalsa.txt;
+echo "$alib" >> /tmp/tsalsa.txt;
+} || {
+debpkg=$(which dpkg 2>/dev/null | sed 's|^[^/]*||' 2>/dev/null);                                         
+[[ -x "$depkpg" ]]&& { 
+echo "Waiting for dpkg to list the libasound2 version. This may take about 30 seconds..."
+echo -n "Alsa lib: " >> /tmp/tsalsa.txt;
+dpkg -l libasound2 |awk '/^ii/ {print $3}' >> /tmp/tsalsa.txt; wait
+} || {
+echo -n "dpkg path:  " >> /tmp/tsalsa.txt;
+echo "$debpkg " >> /tmp/tsalsa.txt;
+}; }
+echo -n "Alsa utils: " >> /tmp/tsalsa.txt;
+echo "$autil" >> /tmp/tsalsa.txt; echo "" >> /tmp/tsalsa.txt;
+echo "Alsa modules:" >> /tmp/tsalsa.txt;
+echo "        $amod" >> /tmp/tsalsa.txt; echo "" >> /tmp/tsalsa.txt;
+echo "Snd/soundcore: " >> /tmp/tsalsa.txt;
+echo "      $lsm" >> /tmp/tsalsa.txt; echo "" >> /tmp/tsalsa.txt;
+echo "Alsa cards: " >> /tmp/tsalsa.txt;
+echo "$acards" >> /tmp/tsalsa.txt; echo "" >> /tmp/tsalsa.txt;
+echo "Codec: " >> /tmp/tsalsa.txt;
+echo "$codec" >> /tmp/tsalsa.txt;
+echo "$codechda" >> /tmp/tsalsa.txt; echo "" >> /tmp/tsalsa.txt;
+[[ "$asc" = "" ]]|| {
+echo -n "Asound.conf" >> /tmp/tsalsa.txt;                                                        
+echo "$asc" >> /tmp/tsalsa.txt; echo "" >> /tmp/tsalsa.txt; }
+[[ "$afilz" = "" ]]|| {
+echo "Alsa options files:number of entrys:" >> /tmp/tsalsa.txt;                                       
+echo "$afilz" >> /tmp/tsalsa.txt; echo "" >> /tmp/tsalsa.txt;}
+[[ "$aso" = "" ]]|| {
+echo "Asoundrc: " >> /tmp/tsalsa.txt;                                                         
+echo "$aso" >> /tmp/tsalsa.txt; echo "" >> /tmp/tsalsa.txt; }
+echo "Lsof output: " >> /tmp/tsalsa.txt;                                                        
+echo "$lso" >> /tmp/tsalsa.txt; echo "" >> /tmp/tsalsa.txt;
+crdcnt=$(cat /proc/asound/cards |sed -n 's/[ ]\+\]:.*$/]/p' |awk '{printf "%d ", $1}; END {print ""}');
+echo "cardcnt: $crdcnt" >> /tmp/tsalsa.txt;
+for i in $crdcnt
+do
+crdname=$(cat /proc/asound/cards |grep "$i \[" |sed 's/[ ]\+].*/]/;s/^ //');
+echo "Amixer item options for card $crdname _________________________________" >> /tmp/tsalsa.txt;
+amxc=$(amixer -c $i contents |grep -B 3 "Item #" |sed -n '/.*ENUMERATED/!p' |sed -e ':b; N; s/\n//; bb' |sed 's/numid/\nnumid/g' |sed 's/numid.*name=//' |sed 's/| dBscale.*$//g');
+echo "$amxc" >> /tmp/tsalsa.txt;
+echo "" >> /tmp/tsalsa.txt;
+echo "Amixer contents for card $crdname _____________________________________" >> /tmp/tsalsa.txt;
+amix=`amixer -c $i |sed 's/^  //' |sed 's/\&/N/g' |sed -n '/^C\|^P\|^L\|^Mono:$/!p' |sed 's/Front Left: Playback \|Front Right: Playback \|Mono: Playback \|Front Left: \|Front Right: //' |sed 's/^[0-9]\+ //;s/\[\|\]//g;s/%.*dB/%/;/^S/!s/^/ /' |sed -e :a -e '$!N;s/\n[^S]/ /;ta' -e 'P;D' |sed 's/Simple mixer control/amixer set/;s/% on /%,/;s/Capture off //;s/Capture on //'`;
+echo "$amix" >> /tmp/tsalsa.txt;
+echo "" >> /tmp/tsalsa.txt;
+done; 
+echo "raw amixer output:" >> /tmp/tsalsa.txt;
+amixer >> /tmp/tsalsa.txt;
+echo "" >> /tmp/tsalsa.txt;
+[[ -d /sys ]]&& {
+echo "Module Parameters:" >> /tmp/tsalsa.txt;
+grep . /sys/module/snd_*/parameters/* |sed 's/.*snd/snd/' >> /tmp/tsalsa.txt;
+echo >> /tmp/tsalsa.txt; }
+[[ -d /sys/devices/virtual/dmi/id ]]&& {
+echo "Hardware Info:" >> /tmp/tsalsa.txt;
+grep -s . /sys/devices/virtual/dmi/id/* |sed 's/.*\/id\///' |awk -F':' '{if($2 != " ") print $0}' >> /tmp/tsalsa.txt;
+}
+[[ -d /proc/asound/seq/ ]]&& {
+echo >> /tmp/tsalsa.txt;
+echo "Seq clients: " >> /tmp/tsalsa.txt;
+cat /proc/asound/seq/clients >> /tmp/tsalsa.txt; }
+[[ -d /proc/asound/ ]]&& {
+echo >> /tmp/tsalsa.txt;
+echo "Devices: " >> /tmp/tsalsa.txt;
+cat /proc/asound/devices >> /tmp/tsalsa.txt; }
+[[ "$lspvn" = "" ]]|| {
+echo >> /tmp/tsalsa.txt;                                                                                   
+echo "Lspci -vn: " >> /tmp/tsalsa.txt;                                                                    
+echo "$lspvn" >> /tmp/tsalsa.txt;                                                                         
+echo >> /tmp/tsalsa.txt; }
+echo "Codec info: " >> /tmp/tsalsa.txt;
+for i in $(seq 0 6); do cat "/proc/asound/card0/codec#$i" 2>/dev/null; done >> /tmp/tsalsa.txt;
+mdfive=$(which md5sum 2>/dev/null | sed 's|^[^/]*||' 2>/dev/null);                                         
+[[ -x "$mdfive" ]]&& {
+echo -n "md5sum tsalsa: " >> /tmp/tsalsa.txt;
+md5sum tsalsa  >> /tmp/tsalsa.txt; }
+tf=$(find tsalsa -printf '%T@ %C@ %A@ ' 2>/dev/null);
+echo -n "$tf" >> /tmp/tsalsa.txt;
+tt=$(find /tmp/tsalsa.txt -printf '%T@ %C@ %A@\n' 2>/dev/null);
+echo "$tt" >> /tmp/tsalsa.txt;
+echo "curl: $crl" >>  /tmp/tsalsa.txt; echo "wget: $wgt" >>  /tmp/tsalsa.txt;
+echo "dialog: $dialg" >> /tmp/tsalsa.txt;
+echo "tsalsa version $vers end:  $(date) $SECONDS" >> /tmp/tsalsa.txt;
+sed -i 's/.$/&\t/' /tmp/tsalsa.txt; sed -i 's/\&/N/g' /tmp/tsalsa.txt;
+[[ -x "$mdfive" ]]&& { 
+echo -n "md5sum tsalsa.txt: " >> /tmp/tsalsa.txt;                                                            
+md5sum /tmp/tsalsa.txt  >> /tmp/tsalsa.txt; }
+
+[[ -n "$crl" ]]&& {
+echo "uploading /tmp/tsalsa.txt to nopaste.com"
+spinnr
+url=$(curl -s -F file=@/tmp/tsalsa.txt nopaste.com/a);                                                              
+[[ "$url" = "" ]]&& crl=""; echo "$url" >> /tmp/tsalsa.txt;
+echo " tsalsa completed in $SECONDS seconds"
+echo -n "paste this url in #alsa: "; tput setaf 1; echo "$url"; tput sgr0;
+} || {
+[[ -n "$wgt" ]]&& {
+echo "uploading /tmp/tsalsa.txt to pastebin.ca"                                                           
+spinnr
+echo "name=$USER&type=1&description=/tmp/alsa.txt&expiry=&s=Submit+Post&content=" > /tmp/alsa.txt         
+cat /tmp/tsalsa.txt >> /tmp/alsa.txt;
+wget -O /tmp/test.wget --save-headers pastebin.ca
+grep -i "Unavailable\|unreachable" /tmp/test.wget                                                                     
+[[ $? -eq 1 ]]&& {
+wget -O - --tries=1 --timeout=5 --post-file=/tmp/alsa.txt http://pastebin.ca/?api=OCWq14uiDWcgaWLn2doPXbBl8tA8TQdG  &>/tmp/wget.tmp;
+}||{
+failwget=1
+}
+if [ "$failwget" -eq "1" ]; then 
+echo "inform #alsa that tsalsa FAILED to upload to pastebin.ca"; 
+echo "if you have curl use this command to upload tsalsa output:";
+echo "curl -F file=@/tmp/tsalsa.txt nopaste.com/a"; 
+echo "or upload /tmp/tsalsa.txt to a pastebin site;"                                                         
+echo "then copy/paste the pastebin url in #alsa; here is a list of pastebin sites:"                       
+echo "http://nopaste.com    http://rafb.net     http://nopaste.info   http://pastie.caboo.se"             
+echo "http://paste.geeknode.org     http://pastebin.co.uk     http://paste.stgraber.org"                  
+echo "http://paste.husk.org         http://pastebin.4programmers.net";
+fi 
+[[ "$failwget" -eq "0" ]]&& {
+echo " tsalsa completed in $SECONDS seconds"
+pburl="$(grep "is:" /tmp/wget.tmp |sed -ne 's/.*is:<\/p><p><a href=\"\/\([0-9]\+\).*/\1/p')";             
+[[ "$pburl" != "" ]]&& {
+echo -n "paste this url in #alsa: "; tput setaf 1; echo "http://pastebin.ca/$pburl"; tput sgr0; 
+} || { wgt=""; echo "$pburl" >> /tmp/tsalsa.txt; }; }; }; }
+[[ "$crl" = "" ]]&& [[ "$wgt" = "" ]]&& {
+echo "tsalsa completed in $SECONDS seconds"
+echo "pastebin.ca or nopaste.com may be down temporarily;"
+echo "upload /tmp/tsalsa.txt to a pastebin site;"
+echo "then copy/paste the pastebin url in #alsa; here is a list of pastebin sites:"
+echo "http://nopaste.com    http://rafb.net     http://nopaste.info   http://pastie.caboo.se"
+echo "http://paste.geeknode.org     http://pastebin.co.uk     http://paste.stgraber.org"
+echo "http://paste.husk.org         http://pastebin.4programmers.net"
+}
+[[ -x $(which lspci |sed 's/.* //') ]]|| echo "NOTICE: you need to be root to run lspci; maybe rerun tsalsa as root"
+[[ -x $(which lsmod |sed 's/.* //') ]]|| echo "NOTICE: you need to be root to run lsmod; maybe rerun tsalsa as root"
+[[ -x $(which lsof |sed 's/.* //') ]]|| echo "NOTICE: you need to be root to run lsof; maybe rerun tsalsa as root"
+echo ""
+exit 0

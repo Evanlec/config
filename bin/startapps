@@ -1,0 +1,13 @@
+#!/bin/sh
+
+sudo netcfg2 smc
+
+urxvt -e screen weechat &
+
+pidgin &
+
+skype &
+
+firefox &
+
+exit 0

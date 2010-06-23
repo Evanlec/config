@@ -1,0 +1,8 @@
+#!/bin/bash
+file=$1
+path=`pwd`
+rm -rf /tmp/burn;
+mkdir /tmp/burn;
+ln -s $path/$1 /tmp/burn/$1
+echo "Created link to $path/$1 in /tmp/burn/$1"
+exit 0

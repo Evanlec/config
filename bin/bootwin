@@ -1,0 +1,2 @@
+#!/bin/sh
+sudo grub-set-default 3 && reboot;

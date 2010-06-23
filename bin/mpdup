@@ -1,0 +1,23 @@
+#!/bin/bash
+MPD_HOST="localhost"
+MPD_PASS="password"
+MPD_PORT=6600
+playlist='main'
+
+echo "Creating the new DB. This may take a moment."
+mpd --create-db > /dev/null
+echo "Restarting mpd."
+#echo -e "password $MPD_PASS\nkill" | nc $MPD_HOST $MPD_PORT > /dev/null
+mpd --kill > /dev/null
+# If you have mpd configure to use a pid file, mpd --kill is simpler. 
+sleep 2
+mpd > /dev/null
+#MPD_HOST="$MPD_PASS@$MPD_HOST"
+echo "Remaking playlist."
+mpc clear > /dev/null
+mpc ls | mpc add > /dev/null
+echo "Sorting playlist."
+~/bin/mpdsort.py
+mpc rm $playlist > /dev/null
+mpc save $playlist > /dev/null
+echo "Done."

@@ -1,0 +1,11 @@
+#!/bin/bash
+#Screenshot Script
+cd /home/el/pic/shots;
+scrot '%Y-%m-%d.png' $@ -q 75 -e 'echo $f | xclip'; 
+sleep 1
+file=`xclip -o` #kind of hackish
+echo $file
+scp -P 50100 $file el@copperbeechjewelry.com:/var/www/lets-talk.org/html/shots/$file
+echo "http://lets-talk.org/shots/$file" | xclip;
+echo $file;
+exit 0

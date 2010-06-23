@@ -1,0 +1,5 @@
+#!/bin/bash
+
+vim -d /etc/xdg/awesome/rc.lua /home/el/.config/awesome/rc.lua
+
+exit 0

@@ -1,0 +1,5 @@
+#!/bin/bash
+
+scp -P 50100 $1 el@slice:$2
+echo "copying $1 to el@slice:$2"
+exit 0

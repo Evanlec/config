@@ -1,0 +1,5 @@
+#!/bin/bash
+
+scp -P 50100 $1 evanlec.dyndns.org:$2
+echo "copying $1 to evanlec.dyndns.org:$2"
+exit 0

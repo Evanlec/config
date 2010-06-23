@@ -1,0 +1,17 @@
+#!/bin/sh
+# Simple script run at login time to determine if screen+irssi is running, and if not, to start it
+# Written by Evan LeCompte
+
+irssi_screen=`screen -ls | grep irssi`
+
+#echo $num_screens
+
+#determine if screen+irssi is already running
+if [[ -n "$irssi_screen" ]]
+then # if yes then reconnect screen session
+	urxvtc -g 80x30+0+0 -e screen -r irssi
+else # no screen+irssi running, start new screen session running irssi
+	urxvtc -g 80x30+0+0 -e screen -S irssi irssi
+fi
+
+exit 0

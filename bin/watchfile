@@ -1,0 +1,2 @@
+#!/bin/bash
+cat "$@" ; echo while [ $? -ne 1 -a $? -ge 0 ] && echo -n '^fg()' do cat "$@" ; echo inotifywait -e modify -qq $@ done 

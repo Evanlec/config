@@ -1,0 +1,7 @@
+#!/bin/zsh
+
+FOO=meltnfr_iki
+
+mysqldump -al --user=$FOO --password=$FOO -h localhost --add-drop-table $FOO | mysql -h joedev.no-ip.org --user=$FOO --password=$FOO $FOO
+exit 0
+

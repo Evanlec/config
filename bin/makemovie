@@ -1,0 +1,18 @@
+#!/bin/bash
+#My make DVD movie from * script
+file=$1
+
+ext="${file#*.*}"
+no_ext="${file%*.*}"
+
+echo "Creating $no_ext.mpg"
+tovid -quality 10 -dvd -ffmpeg -fit 4000 -in $1 -out $no_ext;
+
+echo "executing makexml $no_ext.mpg -out MyDisc"
+makexml "$no_ext.mpg" -out MyDisc;
+
+
+#echo "now running, makedvd -burn MyDisc.xml make sure there's a blank disc in the drive!"
+makedvd MyDisc.xml;
+
+exit 0

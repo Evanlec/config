@@ -1,0 +1,4 @@
+#!/bin/sh
+xsetroot -cursor_name left_ptr
+export MAYA_MMSET_DEFAULT_XCURSOR=1
+maya $@

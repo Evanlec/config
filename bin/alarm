@@ -1,0 +1,30 @@
+#!/bin/bash
+masa="`date +%k:%M`"
+mp3="$HOME/nicotine/duhast.mp3" #change this
+
+if [ $# != 1 ]; then
+echo "please insert alarm time [24hours format]"
+echo "example ./alarm 13:00 [will ring alarm at 1:00pm]"
+exit;
+fi
+alarm=$1
+if [[ "$alarm" =~ ^[0-2][0-9]\:[0-5][0-9]$ ]]
+#fix me with better regex >_<
+then
+echo "time now $masa"
+echo "alarm set to $alarm"
+echo "will play $mp3"
+else
+echo "invalid clock format"
+exit;
+fi
+
+while [ $masa != $alarm ];do
+masa="`date +%k:%M`" #update time
+done
+echo $masa
+if [ $masa = $alarm ];then
+echo ringggggggg
+mplayer $mp3
+fi
+exit

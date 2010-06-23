@@ -1,0 +1,249 @@
+#!/bin/bash
+#
+# pbrisbin 2009, 2010
+#
+# http://pbrisbin.com:8080/bin/burn
+#
+###
+
+### utilities {{{
+set_title() { [ "$TERM" != "linux" ] && echo -ne "\033]0;$(basename "$0")\007"; }
+
+message() { 
+  echo "usage: burn [option] [file] [directory] ..."
+  echo
+  echo "  burn [arguments] to disc as a data cd/dvd"
+  echo
+  echo "  options"
+  echo
+  echo "        --dvd  burn to dvd-r (default)"
+  echo "        --cd   burn to cd-r"
+  echo
+  echo "        -a     burn files as an audio cd (assumes --cd)"
+  echo "        -i     just generate an iso image"
+  echo
+  echo "  burn *.iso will just burn the image to disc"
+  echo
+  echo "  pass - to read a list of files on stdin"
+  echo
+  exit 1
+}
+
+logger() { echo "$(date +'[ %d %b %Y %H:%M ]') :: $*" | tee -a "$log"; }
+errorout() { logger "error: $*"; exit 1; }
+
+# }}}
+
+# relative to absolute {{{
+#
+# take a relative path and return an absolute one 
+# that's required for symlinking to work
+rel2abs() {
+  local file dir
+
+  file="$(basename "$1")"
+  dir="$(dirname "$1")"
+
+  pushd "${dir:-./}" &>/dev/null || exit 1
+
+  echo "$PWD/$file"
+
+  popd &>/dev/null
+}
+
+# }}}
+
+# check disc type {{{
+#
+# sets the var $type to CD or DVD, will loop endlessly till it gets a
+# value
+check_disc_type() {
+  local string
+
+  while true; do
+    string="$(hal-device | awk -F \' '/volume\.disc\.type/ {print $2}')"
+
+    case "$string" in
+      cd*)  type='CD' ; return 0          ;;
+      dvd*) type='DVD'; return 0          ;;
+      *)    logger 'waiting for drive...' ;;
+    esac
+    
+    sleep 3
+  done
+}
+
+# }}}
+
+# link and make an iso {{{
+#
+# takes multiple files and makes a folder of symlinks to be burnt, then
+# makes an iso
+make_iso() {
+  local files=( "$@" ) target file
+
+  [ "${#files[@]}" -eq 0 ] && errorout 'no args passed'
+
+  # make the folder
+  mkdir "$dir/to_burn"
+
+  logger 'linking files...'
+  for file in "${files[@]}"; do
+    target="$(rel2abs "$file")"
+
+    if [ -e "$target" ]; then
+      ln -s "$target" "$dir/to_burn/"
+    else
+      logger "$target not found, skipping..."
+    fi
+  done
+
+  # generate it
+  logger 'building iso...'
+  mkisofs -o "$iso" -f -r -J -l -allow-leading-dots "$dir/to_burn/" 2>/dev/null || errorout 'mkisofs: failed making iso'
+}
+
+# }}}
+
+# burn it {{{
+#
+# burns an iso to disc
+burn_iso() {
+  local iso="$1"
+
+  [ -e "$iso" ] || errorout "$1 does not exist"
+
+  # removed hal-device
+  # sets $type as CD/DVD
+  #check_disc_type
+  type="${type:-DVD}"
+  # removed hal-device
+
+  logger 'burning iso...'
+  case "$type" in
+    CD)  cdrecord -v speed=48 dev=$dev "$iso" 2>/dev/null ;;
+    DVD) growisofs -dvd-compat -Z $dev="$iso" 2>/dev/null ;;
+  esac
+
+  ret=$?
+
+  # wait, eject, and exit
+  sleep 5 && eject "$dev"
+  exit $ret
+}
+
+# }}}
+
+# burn a CDA {{{
+#
+# does _not_ check size limits
+burn_cda() {
+  local files=() file dest
+
+  # check input
+  [ $# -eq 0 ] && errorout 'no args passed'
+
+  # deal with file/dirs
+  for file in "$@"; do
+    if [ -d "$file" ]; then
+      files+=( $(find "$file" -type f) )
+    elif [ -e "$file" ]; then
+      files+=( "$file" )
+    else
+      logger "$file not found, skipping"
+    fi
+  done
+
+  [ ${#files[@]} -eq 0 ] && errorout 'no files found'
+
+  file=''
+
+  # generate WAVs only if needed
+  for ((i=0; i<${#files[@]}; i++)); do
+    file="${files[i]}"
+    dest="$dir/$((i+1)).wav"
+
+    if [[ "$file" =~ .wav$ ]]; then
+      ln -s "$file" "$dest"
+    else
+      logger "converting $file..."
+      #mplayer -vo null -vc null -ao pcm:waveheader:file="$dest" "$file"
+      mplayer -vo null -vc null -af lavcresample=44100,channels=2,format=s16le -ao pcm:file="$dest" "$file" 2>/dev/null
+    fi
+  done
+
+  # removed hal-device
+  # sets $type as CD/DVD
+  #check_disc_type
+  type="${type:-CD}"
+  # removed hal-device
+
+
+  # burn it
+  logger 'burning CDA...'
+  case "$type" in
+    CD) cdrecord dev=$dev fs=4096k -v -useinfo speed=48 -dao -eject -pad -audio "$dir"/*.wav 2>/dev/null ;;
+    *)  errorout 'cannot burn CDA to non-CD'
+  esac
+
+  exit $?
+}
+
+# }}}
+
+# parse options {{{
+parse_options() {
+  if [ $# -eq 1 ] && [[ "$1" =~ .iso$ ]]; then
+    burn_iso "$1"
+  fi
+
+  # defaults
+  mode='DAT'
+
+  while [ -n "$1" ]; do
+    case "$1" in
+      # removed hal-device
+      --cd)  type='CD'                   ;;
+      --dvd) type='DVD'                  ;;
+      # removed hal-device
+      -a)    mode='CDA'                  ;;
+      -i)    mode='ISO'                  ;;
+      -h)    message                     ;;
+      -)     args+=( $(cat /dev/stdin) ) ;;
+      *)     args+=( "$1" )              ;;
+    esac
+    shift
+  done
+}
+
+# }}}
+
+# main {{{
+main() {
+  rm -rf "$dir"; mkdir "$dir"
+
+  case "$mode" in
+    CDA) burn_cda "${args[@]}"                  ;;
+    ISO) make_iso "${args[@]}"; cp -v "$iso" ./ ;;
+    DAT) make_iso "${args[@]}"; burn_iso "$iso" ;;
+    *)   errorout "invalid mode $mode"          ;;
+  esac
+}
+
+# }}}
+
+### constants {{{
+dev='/dev/sr0'
+log="$LOGS/burn.log"
+
+dir='/tmp/burn'
+iso="$dir/image.iso"
+
+# }}}
+
+# run it {{{
+set_title
+parse_options "$@"
+main
+
+# }}}

@@ -1,0 +1,44 @@
+#!/bin/bash
+# 
+# Dzen2 App Launcher
+# -tw = Width of titlebar, -w = Width of slavewindow,
+# -l = length of slavewindow. Remember to adjust -l accordingly when adding 
+# apps.  
+#
+# Needed Applications:
+
+AP1=firefox3
+AP2=thunar
+AP3=pidgin
+AP4=gnome-terminal
+AP5=
+
+# Deco:
+
+#DC1=3x17
+#DC2=8x8
+#DC3=8x3
+#DC4=3x3
+
+# Colors:
+
+FG1=#99CCFF
+FG2=#111111
+FG3=#99CCFF
+
+# Icons:
+
+ICM=~/.awesome/arch.xpm
+IC1=~/.awesome/firefox.xpm
+IC2=~/.awesome/thunar.xpm
+IC3=~/.awesome/pidgin.xpm
+IC4=~/.awesome/gnome-terminal.xpm
+
+# Text parsed to Dzen2
+
+(echo "^fg(${FG2})^i(${ICM})"; echo -e "^fg(${FG1})\
+\n^p(5)^fg(${FG3})^i(${IC1})^fg(${FG1}) ${AP1} \
+\n^p(5)^fg(${FG3})^i(${IC2})^fg(${FG1}) ${AP2} \
+\n^p(5)^fg(${FG3})^i(${IC3})^fg(${FG1}) ${AP3} \
+\n^p(5)^fg(${FG3})^i(${IC4})^fg(${FG1}) ${AP4} ")\
+| dzen2 -y '0' -fn '-*-terminus-*-r-normal-*-*-120-*-*-*-*-iso8859-*' -bg '#222222' -fg '#99CCFF' -l 4 -tw 25 -w 125 -m -p -e 'button1=enterslave,menuexec'

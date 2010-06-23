@@ -1,0 +1,151 @@
+#!/bin/zsh
+
+FG='#aaaaaa'
+BG='#222222'
+FONT='-*-profont-*-*-*-*-12-*-*-*-*-*-*-*'
+BIGFONT='-*-profont-*-*-*-*-12-*-*-*-*-*-*-*'
+ICONPATH=/usr/share/icons/dzen
+
+EVENTS="entertitle=uncollapse;leavetitle=collapse;button4=scrollup;button5=scrolldown"
+EVENTSCLEARABLE="entertitle=uncollapse;leavetitle=collapse"
+
+WIFI='eth0'
+
+logger (){
+while true
+do
+    read line
+    echo "$line"
+done \
+  | awk 'BEGIN {print "^fg(white)|^fg()'$1'^fg(white)|^fg()";fflush()}; {print ;fflush()}' \
+  | sed -re 's/(([^ ]* +){3})/^fg(white)\1^fg()/' #Highlight datetimes
+
+}
+
+#key_symulator(){
+#key="primer"
+#while [ $key ]
+#do
+#    read key
+#    xte 'keydown Super_L' "key $key" 'keyup Super_L'
+#done
+#}
+
+alias my_dzen='dzen2  -h 14 -x $BASE -tw $WIDTH -fg $FG -bg $BG'
+
+set_pos (){ # set_pos width_in_pixels
+    BASE=$(echo $BASE + $WIDTH | bc)
+    WIDTH=$1
+}
+
+BASE=280
+WIDTH=0
+
+#set_pos 155
+#watchfile ~/.xmonad-status \
+#  | awk -F '|' '{print $1;fflush()}' \
+#  | my_dzen  -e 'button1=menuprint' -ta c -w 160 -m h -l 9 \
+#  | key_symulator &
+
+#set_pos 140
+#watchfile ~/.xmonad-status \
+#  | awk -F '|' '/\|/ {print $3 "\n" $3;fflush()}' \
+#  | my_dzen -fn $FONT -e $EVENTSCLEARABLE -ta l -l 1 -u &
+
+#set_pos 60
+#inotail -f -n 50 /var/log/kernel.log \
+#  | logger KERNEL \
+#  | my_dzen -fn $FONT -e $EVENTS -ta c -l 20 &
+
+#set_pos 50
+#inotail -f -n 50 /var/log/messages.log \
+#  | logger MAIN \
+#  | my_dzen -fn $FONT -e $EVENTS -ta c -l 20 &
+
+playlist=$(mpc playlist)
+set_pos 200
+while true
+do
+	echo "`mpc | head -n 1`"
+   	echo -e $playlist
+	sleep 5
+done \
+| my_dzen -fn $FONT -e $EVENTS -ta c -l 20 -w 400 &
+
+
+set_pos 60
+while [ $? -ne 1  -a  $? -ge 0  ]  && echo -n '^fg()'
+do
+    if (amixer sget Front | grep -qF '[off]')
+    then
+        color='#3C55A6'
+        icon=${ICONPATH}/vol-mute.xbm
+    else
+        color='#7CA655'
+        icon=${ICONPATH}/vol-hi.xbm
+    fi
+
+    percentage=$(amixer sget PCM | sed -ne 's/^.*Front Left: .*\[\([0-9]*\)%\].*$/\1/p')
+
+    echo $percentage | gdbar -fg $color -bg darkred -h 10 -w 50 -l "^fg(lightblue)^i($icon)^p(2)^fg()"
+    inotifywait -t 30 /dev/snd/controlC0 -qq
+done \
+  | my_dzen -fn $FONT -ta l -e \
+       'button1=exec:amixer sset PCM toggle -q;button4=exec:amixer sset PCM 1+ -q;button5=exec:amixer sset PCM 1- -q;' &
+
+
+set_pos 115
+while echo -n ' ' 
+do
+    ~/dzen/dzenWeather.pl
+    sleep 30 # 5 min
+done \
+  | my_dzen -fn $FONT -ta l -w 145 -l 2 -u -e $EVENTSCLEARABLE &
+
+
+set_pos 90
+while echo -n ' '
+do
+	echo "CPU: `sensors | grep CPU | cut -c 15-20`"
+	sleep 5
+done \
+	| my_dzen -fn $FONT -ta c &
+
+set_pos 75
+gcpubar -h 20 -w 50 -gs 0 -gw 1 -i 2  -s g -l "^i(${ICONPATH}/cpu.xbm)^fg(#222222)" \
+  | my_dzen -fn $FONT -e '' -ta l &
+
+
+#while sleep 1
+#do
+#    line='0'
+#    if (exit $(echo `date '+%S'` % 2 | bc)); then #odd seconds
+#        line=$(cat /tmp/chat-notify)
+#    fi
+#    echo $line
+#done \
+#  | awk -F '|' '/0/ {print ""; fflush()}; /1/ {print "^fg(yellow)NEW IM"; fflush()};' \
+#  | my_dzen -fn $FONT -ta c &
+
+ 
+set_pos 213
+CONKY1='^cs()
+^tw()^i('$ICONPATH'/temp.xbm) ^i('$ICONPATH'/net-wifi.xbm) ^fg(#BA9093)${addr '$WIFI'}^fg(#80AA83)^p(3)^i('${ICONPATH}'/arr_down.xbm) ${downspeedf '$WIFI'}^p(3)^i('${ICONPATH}'/arr_up.xbm) ${upspeedf '$WIFI'}^fg(white)  
+LOADS: ^fg(#ff0000)${loadavg 1 2 3}
+UPTIME: $uptime
+MEM-BUFFERED: $buffers
+MEM-CACHED: $cached
+MEM-USED: $mem
+'
+conky -t "$CONKY1" \
+  | my_dzen -fn $FONT -e $EVENTSCLEARABLE -ta l -l 8 -w 200 &
+
+
+set_pos 122
+CONKY2='^tw()${time %a %b %d ^fg(white)%I:%M%P}^p(5)
+${execi 3600  (cal -3 | awk "BEGIN {print \\"^cs()\\"}; {print \\"^p(15)\\", \\$0}")}'
+conky -t "$CONKY2" \
+  | my_dzen -fn $FONT -e $EVENTSCLEARABLE -ta l -w 450 -l 8 &
+
+# vim:set nospell ts=4 sts=4 sw=4:
+

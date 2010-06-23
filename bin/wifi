@@ -1,0 +1,15 @@
+#!/bin/bash
+WIRELESSIF="eth0"
+ 
+if [ -z "$1" ]; then
+  echo "Usage: wifi [access point]"
+  exit
+fi
+ 
+echo "Trying to connect to access point $1..."
+ifconfig "$WIRELESSIF" down
+ifconfig "$WIRELESSIF" up
+dhcpcd -k "$WIRELESSIF"
+sleep 1
+iwconfig "$WIRELESSIF" essid "$1"
+dhcpcd "$WIRELESSIF"

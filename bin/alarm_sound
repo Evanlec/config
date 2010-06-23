@@ -1,0 +1,5 @@
+#!/bin/sh
+
+mplayer /home/el/nicotine/Sonata\ no.\ 31.mp3 ;
+
+exit 0
