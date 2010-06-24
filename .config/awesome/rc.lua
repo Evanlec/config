@@ -237,7 +237,7 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey, }, "u", function () awful.util.spawn("google-chrome") end),
     awful.key({ modkey, }, "p", function () awful.util.spawn("pidgin") end),
     awful.key({ modkey, }, "g", function () awful.util.spawn("gvim") end),
-    awful.key({ modkey, }, "v", function () awful.util.spawn("nautilus") end),
+    awful.key({ modkey, }, "v", function () awful.util.spawn("thunar") end),
     awful.key({ }, "XF86Terminal", function () awful.util.spawn(terminal) end),
 
     -- Mulimedia
