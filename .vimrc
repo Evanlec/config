@@ -23,6 +23,7 @@ set hidden
 "maybe these speed things up?
 set ttyfast 
 set ttyscroll=1
+let loaded_matchparen = 1
 
 set viminfo='20,<50,s10,h,%
 
@@ -72,6 +73,7 @@ set showmode
 set number
 set foldmethod=marker
 set cursorline
+set foldcolumn=2
 " colours
 set t_Co=256
 if &diff
