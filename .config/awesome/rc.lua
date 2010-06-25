@@ -40,7 +40,7 @@ layouts =
 tags = {}
 for s = 1, screen.count() do
     -- Each screen has its own tag table.
-    tags[s] = awful.tag({ " one "," two "," three "," four ", }, s, awful.layout.suit.tile)
+    tags[s] = awful.tag({ " one "," two "," three "," four ", }, s, awful.layout.suit.max)
 end
 -- }}}
 
@@ -179,9 +179,9 @@ end
 
 -- {{{ Mouse bindings
 root.buttons(awful.util.table.join(
-    awful.button({ }, 3, function () mymainmenu:toggle() end),
-    awful.button({ }, 4, awful.tag.viewnext),
-    awful.button({ }, 5, awful.tag.viewprev)
+    awful.button({ }, 3, function () mymainmenu:toggle() end)
+--    awful.button({ }, 4, awful.tag.viewnext),
+--    awful.button({ }, 5, awful.tag.viewprev)
 ))
 -- }}}
 
@@ -262,7 +262,7 @@ globalkeys = awful.util.table.join(
 
 -- Client awful tagging: this is useful to tag some clients and then do stuff like move to tag on them
 clientkeys = awful.util.table.join(
-    awful.key({ modkey,           }, "f",      function (c) c.fullscreen = not c.fullscreen  end),
+--    awful.key({ modkey,           }, "f",      function (c) c.fullscreen = not c.fullscreen  end),
     awful.key({ modkey,		  }, "c",      function (c) c:kill()                         end),
     awful.key({ modkey,		  }, "x",      function (c) c:kill()                         end),
     awful.key({ modkey, "Shift" }, "space",  awful.client.floating.toggle                     ),
@@ -340,11 +340,13 @@ awful.rules.rules = {
       properties = { floating = true } },
     { rule = { class = "gimp" },
       properties = { floating = true } },
-    -- Set Firefox to always map on tags number 2 of screen 1.
-    { rule = { class = "Firefox" },
-      properties = { tag = tags[1][2] } },
-    { rule = { class = "Pidgin" },
-      properties = { tag = tags[1][4] } },
+    -- Set Firefox to always map on tags number 1 of screen 2.
+    { rule = { class = "Namoroka" },
+      properties = { tag = tags[2][1], fullscreen = true } },
+    { rule = { class = "google-chrome" },
+        properties = { tag = tags[2][1], fullscreen = true } },
+    { rule = { class = "Pidgin" }, properties = { tag = tags[1][4], 
+      floating = true } },
     { rule = { class = "Skype" },
       properties = { tag = tags[1][4] } },
 }
