@@ -7,6 +7,7 @@ require("beautiful")
 -- Notification library
 require("naughty")
 require("vicious")
+require("calendar2")
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, and wallpapers
@@ -54,15 +55,14 @@ myawesomemenu = {
 }
 
 mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
-                                    { "Terminal", "terminal" },
+                                    { "Terminal", "urxvt" },
                                     { "Firefox", "firefox" },
                                     { "Pidgin", "pidgin" },
-                                    { "Chrome", "chromium-browser" },
+                                    { "Chrome", "google-chrome" },
                                     { "Nicotine", "nicotine" },
-                                    { "Nautilus", "nautilus" },
                                     { "Thunar", "thunar" },
+                                    { "Rhythmbox", "rhythmbox" },
                                     { "VirtualBox", "VirtualBox" },
-                                    { "Blender", "blender" },
                                     { "Gimp", "gimp" }
                                   }
                         })
@@ -78,7 +78,9 @@ spacer.text = "   "
 seperator = widget({type="textbox"})
 seperator.text = "|"
 -- Create a textclock widget
-mytextclock = awful.widget.textclock({ align = "right" })
+mytextclock = awful.widget.textclock({ align = "right", format = " %a %b %d, %l:%M %p " })
+-- attach calendar to textclock
+calendar2.addCalendarToWidget(mytextclock, "<span color='green'>%s</span>")
 
 -- Create a systray
 mysystray = widget({ type = "systray", align = "right" })
