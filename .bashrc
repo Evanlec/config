@@ -1,17 +1,26 @@
-PS1='\[\033[37m\]\u@\h \[\033[36m\]\W \$ \[\033[00m\]'
+PS1='\[\033[37m\]\u@\h \[\033[36m\]\W \$: \[\033[00m\]'
 
 if [ -z "$PS1" ]; then
 	return
 fi
+
 if [ -f /etc/bash_completion ]; then
     . /etc/bash_completion
 fi
+
 if [ "$PS1" != "" -a "$TERM" != "screen" -a "${SSH_TTY:-x}" != x -a "`hostname -s`" = "fm" ] ; then
 		screen -rD && exit 0
 			echo "Screen failed, doing normal startup"
 fi
+# set options
+shopt -s autocd
+shopt -s cdspell
+shopt -s extglob
+
+#environment variables
 export TERM="rxvt-unicode"
 export EDITOR="vim"
+
 # bogus
 if [ -f /unix ] ; then	
 	alias ls='/bin/ls -CF'
@@ -48,24 +57,8 @@ burn_iso() {
 # }}}
 
 
-
-#Alias
-#alias screenshot='sh /home/el/screenshot.sh'
-#alias ls='ls --color=auto'
-#
-#alias ll='ls -l'
-#alias dir='ls -ba'
-#
-#alias ss="ps -aux"
-#alias dot='ls .[a-zA-Z0-9_]*'
-#
-#alias c="clear"
-#alias m="more"
-#alias j="jobs"
-
-# common misspellings
-alias mroe=more
-alias pdw=pwd
+# load my aliases
+source /home/el/.aliasrc
 
 hash -p /usr/bin/mail mail
 

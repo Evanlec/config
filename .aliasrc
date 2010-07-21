@@ -40,6 +40,7 @@ alias diablo2='wine /home/el/.wine/drive_c/Program\ Files/Diablo\ II/Diablo\ II.
 alias home2='wine /home/el/.wine/drive_c/Program\ Files/Sierra/Homeworld2/Bin/Release/Homeworld2.exe -nopbuffer'
 alias taskmgr='gnome-system-monitor'
 alias clyde='sudo clyde'
+alias htres='sudo /etc/rc.d/httpd restart'
 # 
 
 # {{{ App Shortcuts
@@ -142,6 +143,9 @@ alias ...='cd ../..'
 alias ....='cd ../../..'
 alias .....='cd ../../../..'
 
+alias src='source ~/.bashrc'
+alias balias='vim ~/.aliasrc'
+alias bashrc='vim ~/.bashrc'
 alias l='ls --group-directories-first'
 alias ll='ls -lFh'
 alias la='ls -a --group-directories-first'
