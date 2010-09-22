@@ -6,6 +6,7 @@ require("awful.rules")
 require("beautiful")
 -- Notification library
 require("naughty")
+require("shifty")
 require("vicious")
 require("calendar2")
 
@@ -14,7 +15,7 @@ require("calendar2")
 beautiful.init(awful.util.getdir("config") .. "/themes/dust/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
-terminal = "urxvt -g 80x30+10+40"
+terminal = "urxvtcd -g 80x30+10+40"
 editor = os.getenv("EDITOR") or "nano"
 editor_cmd = terminal .. " -e " .. editor
 icon_theme = "/home/el/.icons/black-white_2-Style"
@@ -41,7 +42,7 @@ layouts =
 tags = {}
 for s = 1, screen.count() do
     -- Each screen has its own tag table.
-    tags[s] = awful.tag({ " one "," two "," three "," four ", }, s, awful.layout.suit.max)
+    tags[s] = awful.tag({ " one "," two "," three "," four ", }, s, awful.layout.suit.tile)
 end
 -- }}}
 
@@ -78,7 +79,7 @@ spacer.text = "   "
 seperator = widget({type="textbox"})
 seperator.text = "|"
 -- Create a textclock widget
-mytextclock = awful.widget.textclock({ align = "right", format = " %a %b %d, %l:%M %p " })
+mytextclock = awful.widget.textclock({ align = "right"}, " %a %b %d, %l:%M %p ", 60)
 -- attach calendar to textclock
 calendar2.addCalendarToWidget(mytextclock, "<span color='green'>%s</span>")
 
@@ -343,8 +344,8 @@ awful.rules.rules = {
     { rule = { class = "gimp" },
       properties = { floating = true } },
     -- Set Firefox to always map on tags number 1 of screen 2.
-    { rule = { class = "Namoroka" },
-      properties = { tag = tags[2][1], fullscreen = true } },
+--    { rule = { class = "Namoroka" },
+--      properties = { tag = tags[2][1], fullscreen = true } },
     { rule = { class = "google-chrome" },
         properties = { tag = tags[2][1], fullscreen = true } },
     { rule = { class = "Pidgin" }, properties = { tag = tags[1][4], 
