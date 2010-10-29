@@ -1,55 +1,33 @@
 #Aliases
 
-alias pts='/usr/bin/phoronix-test-suite'
-alias setpath='CDPATH=:..:~:~/projects'
-# Website projects
-alias art='cd /home/el/src/python/art'
+#{{{ remote hosts
 alias women='ssh admin@women -p 50100'
-alias wib='cd /home/el/src/python/women-in-business/wib'
-alias copper='cd /home/el/src/python/copper'
-alias course='cd /home/el/src/python/course'
-alias ray='ssh -p 40100 ray@192.168.2.3'
-alias coders='cd /home/el/src/python/coders'
-alias slice='ssh el@copper -p 50100'
-alias mountslice='sshfs -p 50100 -C -o BatchMode=yes copper:/home/el/src/python/ ~/slice '
-alias light='sudo /etc/rc.d/lighttpd'
-alias httpd='sudo /etc/rc.d/httpd'
-alias nginx='sudo /etc/rc.d/nginx'
-alias py='cd /home/el/src/python'
+alias slice='ssh el@lets-talk.org -p 50100'
 alias jp='lftp -u safe,zone 65.175.237.243:421'
 alias items='cd /home/el/src/python/items'
-alias satchmo='cd /home/el/src/python/satchmo-trunk/satchmo'
-alias trade='cd /home/el/src/python/tradersnh'
-alias openx='cd /home/el/openx'
-alias recadin='cd /home/el/recadin'
-alias eye='cd /home/el/src/python/eye'
-alias sql='sudo /etc/rc.d/mysqld'
-alias fixopenx='sudo chmod -R a+w /home/el/openx/www/admin/plugins && sudo chmod -R a+w /home/el/openx/www/admin/plugins && sudo chmod -R a+w /home/el/openx/plugins'
-alias selling='cd /home/el/sellingarena/selling-arena.com/'
 alias selenium='ssh freelancerforge@selenium'
-alias router='ssh root@192.168.1.1'
-alias srf='cd /home/el/srf/'
-alias g='gvim --remote-silent'
-alias post='sudo /etc/rc.d/postgresql'
-alias weechat='weechat-curses'
-alias nfg='sudo netcfg2'
-alias :q='exit'
-alias nginx='sudo /etc/rc.d/nginx'
 alias nicotine='nicotine.py'
-alias diablo2='wine /home/el/.wine/drive_c/Program\ Files/Diablo\ II/Diablo\ II.exe'
-alias home2='wine /home/el/.wine/drive_c/Program\ Files/Sierra/Homeworld2/Bin/Release/Homeworld2.exe -nopbuffer'
-alias taskmgr='gnome-system-monitor'
-alias clyde='sudo clyde'
-alias htres='sudo /etc/rc.d/httpd restart'
-# 
+#}}} 
+
+#{{{ projects
+alias elec='cd /home/el/src/python/elecompte'
+alias blog='cd /home/el/src/python/blog'
+alias art='cd /home/el/src/python/art'
+alias copper='cd /home/el/src/python/copper'
+alias course='cd /home/el/src/python/course'
+alias py='cd /home/el/src/python'
+alias satchmo='cd /home/el/src/python/satchmo-trunk/satchmo'
+alias django='cd /home/el/src/python/django-trunk'
+alias pylib='cd /usr/lib/python2.6/site-packages'
+#}}}
 
 # {{{ App Shortcuts
 alias startxdbg='rm awesome1 && startx > awesome1 2>&1' 
 alias lightscribe='/opt/lightscribeApplications/SimpleLabeler/./SimpleLabeler'
 alias mpdup='sudo mpdup'
-alias django='cd /home/el/src/python/django-trunk'
+alias weechat='weechat-curses'
 # My cool diskusage command
-#alias diskusage='du -h --max-depth=1 -m | sort -n -r | vimpager'
+alias diskusage='du -h --max-depth=1 -m | sort -n -r | vimpager'
 # }}}
 
 # {{{ Git Aliases
@@ -82,6 +60,7 @@ alias simcity='WINEDEBUG=-all env WINEPREFIX="/home/${USER}/.wine" nice -20 wine
 # vim aliases
 alias v='vim'
 alias vp='vimpager'
+alias g='gvim --remote-silent'
 
 alias xorg="sudo vim /etc/X11/xorg.conf"
 alias rc='sudo vim /etc/rc.conf'
@@ -122,15 +101,11 @@ alias iwpriv='sudo iwpriv'
 alias updatedb='sudo updatedb'
 alias scan='sudo iwlist rausb0 scan'
 alias netcfg2='sudo netcfg2'
+alias netcfg='sudo netcfg'
 alias netstart='sudo /etc/rc.d/network restart'
 alias traceroute='sudo traceroute'
 alias hcitool='sudo hcitool'
 alias watch_wifi0='watch -n 0.5 iwconfig wifi0'
-# }}}
-
-# {{{ SAMBA mounts
-alias mountwin='sudo mount -t cifs \\\\192.168.2.100\\Documents /mnt/smb'
-alias mountphoto='sudo mount -t cifs \\\\192.168.1.139\\AA\ photo\ dump /mnt/smb'
 # }}}
 
 # {{{ RDP Connections
@@ -170,7 +145,7 @@ alias pi='sudo pacman -Qi'
 alias prd='sudo pacman -Rd'
 alias prs='sudo pacman -Rs'
 alias pl='sudo pacman -Ql'
-
+alias clyde='sudo clyde'
 # }}}
 
 # {{{ Misc
@@ -187,13 +162,22 @@ alias updatefonts='sudo fc-cache -vf'
 alias xp='xprop | grep "WM_WINDOW_ROLE\|WM_CLASS" && echo "WM_CLASS(STRING) = \"NAME\", \"CLASS\""'
 #blank the monitors
 alias blank='xset dpms force standby'
-
+alias :q='exit'
 # }}}
 
-# <-------------- End Alias ----------------->
+#{{{ rc.d
+alias light='sudo /etc/rc.d/lighttpd'
+alias httpd='sudo /etc/rc.d/httpd'
+alias nginx='sudo /etc/rc.d/nginx'
+alias sql='sudo /etc/rc.d/mysqld'
+alias pgs='sudo /etc/rc.d/postgresql'
+alias nginx='sudo /etc/rc.d/nginx'
+alias htres='sudo /etc/rc.d/httpd restart'
+#}}}
 
+# {{{ Games
 alias lite='cd /home/el/src/python/lite'
 alias nethack='telnet nethack.alt.org'
-alias elec='cd /home/el/src/python/elecompte'
-alias blog='cd /home/el/src/python/blog'
+alias diablo2='wine /home/el/.wine/drive_c/Program\ Files/Diablo\ II/Diablo\ II.exe'
 alias war3='wine /home/el/.wine/drive_c/Program\ Files/Warcraft\ III/war3.exe'
+#}}}

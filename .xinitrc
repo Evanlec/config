@@ -12,6 +12,10 @@ xmodmap -e "keysym Caps_Lock = Escape"
 #gnome-settings-daemon &
 #feh --bg-scale /home/el/gfx/SteelMinimal.jpg & #*****set background******
 
+if which dbus-launch >/dev/null && test -z "$DBUS_SESSION_BUS_ADDRESS"; then
+       eval "$(dbus-launch --sh-syntax --exit-with-session)"
+fi
+
 #startxbindkeys &
 #ulimit -c unlimited &
 #xcompmgr -cC -r7 -o.65 -l-10 -t-8 &
@@ -26,7 +30,7 @@ xmodmap -e "keysym Caps_Lock = Escape"
 nvclock -f -F auto -m 900 -n 600 -a flipping=0 -a quality=2 &
 
 #nvidia-settings -a InitialPixmapPlacement=2 -a GlyphCache=1 
-sudo nvidia-settings --load-config-only &
+#sudo nvidia-settings --load-config-only &
 
 #trayer --expand true --widthtype request --height 16 --edge bottom --align left --transparent true --alpha 255 &
 #tint2 &

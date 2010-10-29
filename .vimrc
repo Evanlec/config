@@ -94,7 +94,7 @@ autocmd winleave * setl nocursorline
 autocmd winenter * setl cursorline
 
 "{{{ statusline setup
-set statusline=%f "tail of the filename
+set statusline=%F "full path of the filename
  
 "display a warning if fileformat isnt unix
 set statusline+=%#warningmsg#
@@ -123,8 +123,7 @@ set statusline+=%{&paste?'[paste]':''}
 set statusline+=%*
  
 set statusline+=%= "left/right separator
-set statusline+=%c, "cursor column
-set statusline+=%l/%L "cursor line/total lines
+set statusline+=line:%l/%L "cursor line/total lines
 set statusline+=\ %P "percent through file
 set laststatus=2
 "}}}

@@ -3,15 +3,9 @@ PS1='\[\033[37m\]\u@\h \[\033[36m\]\W \$: \[\033[00m\]'
 if [ -z "$PS1" ]; then
 	return
 fi
+# stop wine making file associations
+export WINEDLLOVERRIDES='winemenubuilder.exe=d'
 
-if [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
-fi
-
-if [ "$PS1" != "" -a "$TERM" != "screen" -a "${SSH_TTY:-x}" != x -a "`hostname -s`" = "fm" ] ; then
-		screen -rD && exit 0
-			echo "Screen failed, doing normal startup"
-fi
 # set options
 shopt -s autocd
 shopt -s cdspell
@@ -20,6 +14,7 @@ shopt -s extglob
 #environment variables
 export TERM="rxvt-unicode"
 export EDITOR="vim"
+export BROWSER="google-chrome"
 
 # bogus
 if [ -f /unix ] ; then	
@@ -27,6 +22,7 @@ if [ -f /unix ] ; then
 else
 	alias ls='/bin/ls -F'
 fi
+
 # burn it {{{
 #
 # burns an iso to disc
@@ -59,8 +55,6 @@ burn_iso() {
 
 # load my aliases
 source /home/el/.aliasrc
-
-hash -p /usr/bin/mail mail
 
 if [ -z "$HOST" ] ; then
 	export HOST=${HOSTNAME}
@@ -103,9 +97,16 @@ xtitle ()
 	echo -n -e "\033]0;$*\007"
 }
 
-cd()
-{
-	builtin cd "$@" && xtitle $HOST: $PWD
+cd() {
+    if [ $# -ne 1 ]; then builtin cd;
+    else
+        if [ -f $1 ]; then
+            builtin cd $(dirname $1)
+            $EDITOR $(basename $1)
+       else
+            builtin cd $1
+        fi
+    fi
 }
 
 bold()

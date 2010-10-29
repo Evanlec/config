@@ -13,7 +13,7 @@ activity "active: %n (%t) [%w:%s]"
 bell "bell: %n (%t) [%w:%s]^G"
 vbell_msg "[[[ ding ]]]"
 vbell off
-shell /bin/zsh
+shell /bin/bash
 hardstatus on
 hardstatus alwayslastline
 hardstatus string "%{.bW}%-w%{.rW}%n %t%{-}%+w %=%{..G} %H %{..Y} %m/%d %C%a "
@@ -32,7 +32,7 @@ silencewait           15
 
 attrcolor b ".I"
 defbce "on"
-termcapinfo rxvt-256color 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
+termcapinfo rxvt-unicode 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
 #termcapinfo xterm 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm' 
 #caption always "%{= kb}[%{kW} %2` | %3` %{b}][ %=%{w}%?%-Lw%?%{b}(%{W}%n*%f %t%?(%u)%?%{b})%{w}%?%+Lw%?%= %{b}][%{kB} %d.%m.%Y %{kW}%0c %{kb}]"
 

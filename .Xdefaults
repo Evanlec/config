@@ -1,5 +1,5 @@
 ! Cursor theme
-Xcursor.theme: Obsidian
+Xcursor*theme: Bluecurve
 
 ! Terminal fonts
 !*font: -*-terminus-medium-*-*-*-12-*-*-*-*-*-*-*
@@ -31,12 +31,12 @@ URxvt*fading: 15%
 URxvt*fadeColor: #3a3a3a
 URxvt*shading: 75
 URxvt*intensityStyles: true
-URxvt*internalBorder: 1
+URxvt*internalBorder: 5
 URxvt*externalBorder: 5
 !URxvt*lineSpace: 2
 URxvt*borderLess: false
 URxvt*termName: rxvt-256color
-URxvt*borderColor: #676767
+URxvt*borderColor: #000000
 URxvt*iconFile:	/home/el/.icons/terminal.xpm
 URxvt*tripleclickwords: true
 URxvt*insecure: true

@@ -6,7 +6,6 @@ require("awful.rules")
 require("beautiful")
 -- Notification library
 require("naughty")
-require("shifty")
 require("vicious")
 require("calendar2")
 
@@ -16,6 +15,7 @@ beautiful.init(awful.util.getdir("config") .. "/themes/dust/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
 terminal = "urxvtcd -g 80x30+10+40"
+browser = "google-chrome"
 editor = os.getenv("EDITOR") or "nano"
 editor_cmd = terminal .. " -e " .. editor
 icon_theme = "/home/el/.icons/black-white_2-Style"
@@ -235,10 +235,11 @@ globalkeys = awful.util.table.join(
 --    awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(layouts, -1) end),
 
     -- My program
-    awful.key({ modkey, }, "f", function () awful.util.spawn("firefox") end),
+    awful.key({ modkey, }, "f", function () awful.util.spawn("luakit") end),
     awful.key({ modkey, }, "t", function () awful.util.spawn("thunderbird") end),
     awful.key({ modkey, }, "u", function () awful.util.spawn("google-chrome") end),
     awful.key({ modkey, }, "p", function () awful.util.spawn("pidgin") end),
+    awful.key({ modkey, }, "s", function () awful.util.spawn("skype") end),
     awful.key({ modkey, }, "g", function () awful.util.spawn("gvim") end),
     awful.key({ modkey, }, "v", function () awful.util.spawn("thunar") end),
     awful.key({ }, "XF86Terminal", function () awful.util.spawn(terminal) end),
@@ -250,7 +251,7 @@ globalkeys = awful.util.table.join(
     awful.key({ }, "XF86AudioNext", function () awful.util.spawn("mocp -f") end),
     awful.key({ }, "XF86AudioPrev", function () awful.util.spawn("mocp -r") end),
     awful.key({ }, "XF86AudioPause", function () awful.util.spawn("mocp -G") end),
-    awful.key({ modkey }, "i", function (c) c.minimize=true end),
+--    awful.key({ modkey }, "i", function (c) c.minimize=true end),
     -- Prompt
     awful.key({ modkey },            "F1",     function () mypromptbox[mouse.screen]:run() end),
 
@@ -265,19 +266,19 @@ globalkeys = awful.util.table.join(
 
 -- Client awful tagging: this is useful to tag some clients and then do stuff like move to tag on them
 clientkeys = awful.util.table.join(
---    awful.key({ modkey,           }, "f",      function (c) c.fullscreen = not c.fullscreen  end),
+    awful.key({ modkey,           }, "m",      function (c) c.fullscreen = not c.fullscreen  end),
     awful.key({ modkey,		  }, "c",      function (c) c:kill()                         end),
     awful.key({ modkey,		  }, "x",      function (c) c:kill()                         end),
     awful.key({ modkey, "Shift" }, "space",  awful.client.floating.toggle                     ),
     awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
     awful.key({ modkey,           }, "o",      awful.client.movetoscreen                        ),
     awful.key({ modkey, "Shift"   }, "r",      function (c) c:redraw()                       end),
-    awful.key({ modkey,           }, "n",      function (c) c.minimized = not c.minimized    end),
-    awful.key({ modkey,           }, "m",
-        function (c)
-            c.maximized_horizontal = not c.maximized_horizontal
-            c.maximized_vertical   = not c.maximized_vertical
-        end)
+    awful.key({ modkey,           }, "i",      function (c) c.minimized = not c.minimized    end)
+--    awful.key({ modkey,           }, "m",
+--        function (c)
+--            c.maximized_horizontal = not c.maximized_horizontal
+--            c.maximized_vertical   = not c.maximized_vertical
+--        end)
 )
 
 -- Compute the maximum number of digit we need, limited to 9
@@ -346,12 +347,16 @@ awful.rules.rules = {
     -- Set Firefox to always map on tags number 1 of screen 2.
 --    { rule = { class = "Namoroka" },
 --      properties = { tag = tags[2][1], fullscreen = true } },
-    { rule = { class = "google-chrome" },
-        properties = { tag = tags[2][1], fullscreen = true } },
+--    { rule = { class = "google-chrome" },
+--        properties = { tag = tags[2][1], fullscreen = true } },
     { rule = { class = "Pidgin" }, properties = { tag = tags[1][4], 
       floating = true } },
     { rule = { class = "Skype" },
-      properties = { tag = tags[1][4] } },
+      properties = { tag = tags[1][4], floating = true } },
+    { rule = { class = "Tilda" },
+      properties = { floating = true } },
+    { rule = { class = "Guake.py" },
+      properties = { floating = true } },
 }
 -- }}}
 
