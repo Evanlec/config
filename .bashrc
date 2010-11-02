@@ -62,6 +62,12 @@ fi
 
 HISTIGNORE="[   ]*:&:bg:fg"
 
+svdiff()
+{
+    EDITOR=vimdiff
+    sudoedit $1 $2
+}
+
 psgrep()
 {
 	ps -aux | grep $1 | grep -v grep

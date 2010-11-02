@@ -4,10 +4,10 @@ Xcursor*theme: Bluecurve
 ! Terminal fonts
 !*font: -*-terminus-medium-*-*-*-12-*-*-*-*-*-*-*
 !*boldFont: -*-terminus-medium-*-*-*-12-*-*-*-*-*-*-*
-urxvt.font: xft:Inconsolata:pixelsize=15
-urxvt.boldFont:	xft:Inconsolata:bold:pixelsize=15
-!*font: xft:monaco:size=9 
-!*boldFont: xft:monaco:size=9
+!urxvt.font: xft:Inconsolata:pixelsize=15
+!urxvt.boldFont:	xft:Inconsolata:bold:pixelsize=15
+*font: xft:monaco:size=10 
+*boldFont: xft:monaco:bold:size=10
 
 !Main rxvt options
 URxvt*scrollBar: false

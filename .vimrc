@@ -76,11 +76,14 @@ set cursorline
 set foldcolumn=2
 " colours
 set t_Co=256
+set diffopt=vertical
 if &diff
   color inkpot
 else
-  color candycode
+  color ir_black
 endif
+"some other favorite colorschemes:
+"jellybeans, zenburn, candycode
 " }}}
 
 "scroll off settings
@@ -90,8 +93,6 @@ set sidescroll=1
 
 set shortmess=atI " shorten message prompts a bit
 set mousehide "hide mouse when typing
-autocmd winleave * setl nocursorline
-autocmd winenter * setl cursorline
 
 "{{{ statusline setup
 set statusline=%F "full path of the filename
@@ -128,6 +129,14 @@ set statusline+=\ %P "percent through file
 set laststatus=2
 "}}}
 
+"{{{ -[ AutoCmds ]-
+
+autocmd winleave * setl nocursorline
+autocmd winenter * setl cursorline
+
+" When vimrc is edited, reload it
+autocmd! bufwritepost vimrc source $MYVIMRC
+
 " Stop auto-commenting
 au FileType * set comments=
 
@@ -143,6 +152,8 @@ function! SetCursorPosition()
         endif
     end
 endfunction
+
+"}}}
 
 "{{{ -[ FileTypes ]-
 " Jump to last known cursor position
@@ -213,6 +224,8 @@ nnoremap <silent> <F6> :wq<CR>
 inoremap <silent> <F6> <esc>:wq<CR>
 nnoremap <silent> <F7> :wqa<CR>
 inoremap <silent> <F7> <esc>:wqa<CR>
+" Write to non-writable files anyhow! damnit!
+cmap w!! %!sudo tee > /dev/null %
 
 " Most Recently Used Files (MRU)
 nnoremap <silent> <F12> :MRU<CR>
