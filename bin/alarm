@@ -24,7 +24,7 @@ masa="`date +%k:%M`" #update time
 done
 echo $masa
 if [ $masa = $alarm ];then
-echo ringggggggg
+echo "ringggggggg"
 mplayer $mp3
 fi
 exit

@@ -18,7 +18,7 @@ fi
 
 #startxbindkeys &
 #ulimit -c unlimited &
-#xcompmgr -cC -r7 -o.65 -l-10 -t-8 &
+xcompmgr -cC -r7 -o.65 -l-10 -t-8 &
 #killall urxvtd &
 #mpd
 #zsh ./dzen/status.sh &

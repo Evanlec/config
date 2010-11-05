@@ -62,7 +62,7 @@ alias simcity='WINEDEBUG=-all env WINEPREFIX="/home/${USER}/.wine" nice -20 wine
 alias v='vim'
 alias vp='vimpager'
 alias g='gvim --remote-silent'
-
+alias svd='svdiff'
 alias xorg="sudo vim /etc/X11/xorg.conf"
 alias rc='sudo vim /etc/rc.conf'
 alias xde='vim ~/.Xdefaults'
@@ -144,6 +144,7 @@ alias p='sudo pacman'
 alias pi='sudo pacman -Qi'
 alias prd='sudo pacman -Rd'
 alias prs='sudo pacman -Rs'
+alias prall='sudo pacman -Rsnc'
 alias pl='sudo pacman -Ql'
 alias clyde='sudo clyde'
 # }}}
