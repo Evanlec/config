@@ -1,4 +1,7 @@
-PS1='\[\033[37m\]\u@\h \[\033[36m\]\W \$: \[\033[00m\]'
+#load colors
+source $HOME/.bash/colors
+
+PS1="\[$txtblu\]\u@\h \[\033[36m\]\W \$: \[\033[00m\]"
 
 if [ -z "$PS1" ]; then
 	return
@@ -277,6 +280,42 @@ upload() {
     scp -P 50100 $1 el@slice:/var/www/lets-talk.org/html/upload/$1
     echo "http://lets-talk.org/upload/$1" | xclip
     xclip -o
+    return $?
+  elif [[ -d $1 ]]; then
+    1=$(cd $1 &> /dev/null && pwd)
+    echo "Copying ${1} to el@slice:${2:=$1}"
+    scp -P 50100 -r $1 el@slice:${2}
+    return $?
+  else
+    echo "Please specify a file or directory"
+    return 1
+  fi
+}
+
+cptoslice() {
+  if [[ -f $1 ]]; then
+    local=$1
+    remote=$local
+    echo "Copying $local to el@slice:$remote"
+    scp -P 50100 $local el@slice:$remote
+    return $?
+  elif [[ -d $1 ]]; then
+    1=$(cd $1 &> /dev/null && pwd)
+    echo "Copying ${1} to el@slice:${2:=$1}"
+    scp -P 50100 -r $1 el@slice:${2}
+    return $?
+  else
+    echo "Please specify a file or directory"
+    return 1
+  fi
+}
+
+cptocloud() {
+  if [[ -f $1 ]]; then
+    local=$1
+    remote=$local
+    echo "Copying $local to el@cloud:$remote"
+    scp -P 50100 $local el@cloud:$remote
     return $?
   elif [[ -d $1 ]]; then
     1=$(cd $1 &> /dev/null && pwd)
