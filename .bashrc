@@ -3,6 +3,12 @@ source $HOME/.bash/colors
 
 PS1="\[$txtblu\]\u@\h \[\033[36m\]\W \$: \[\033[00m\]"
 
+# cgroups patch thingy
+# if [ "$PS1" ] ; then  
+    # mkdir -m 0700 /sys/fs/cgroup/cpu/user/$$
+    # echo $$ > /sys/fs/cgroup/cpu/user/$$/tasks
+# fi
+
 if [ -z "$PS1" ]; then
 	return
 fi
@@ -18,6 +24,7 @@ shopt -s extglob
 export TERM="rxvt-unicode"
 export EDITOR="vim"
 export BROWSER="google-chrome"
+export PAGER="less"
 
 # bogus
 if [ -f /unix ] ; then	
@@ -64,6 +71,16 @@ if [ -z "$HOST" ] ; then
 fi
 
 HISTIGNORE="[   ]*:&:bg:fg"
+
+
+sprunge() {
+   URI=$(curl -s -F "sprunge=<-" http://sprunge.us)
+   # if stdout is not a tty, suppress trailing newline
+   if [[ ! -t 1 ]] ; then local FLAGS='-n' ; fi
+   echo $FLAGS $URI
+}
+
+
 
 svdiff()
 {
@@ -294,15 +311,16 @@ upload() {
 
 cptoslice() {
   if [[ -f $1 ]]; then
-    local=$1
-    remote=$local
+    local=$(cd "$(dirname "$1")" 2>/dev/null && pwd)/$(basename "$1")
+    remote="$local"
     echo "Copying $local to el@slice:$remote"
-    scp -P 50100 $local el@slice:$remote
+    scp -C -P 50100 "$local" el@slice:"$remote"
     return $?
   elif [[ -d $1 ]]; then
-    1=$(cd $1 &> /dev/null && pwd)
-    echo "Copying ${1} to el@slice:${2:=$1}"
-    scp -P 50100 -r $1 el@slice:${2}
+    local=$(cd "$(dirname $1)" 2>/dev/null && pwd)/$(basename "$1")
+    remote="$local"
+    echo "Copying $local to el@slice:$remote"
+    scp -C -P 50100 -r "$local" el@slice:"$remote"
     return $?
   else
     echo "Please specify a file or directory"
@@ -312,21 +330,42 @@ cptoslice() {
 
 cptocloud() {
   if [[ -f $1 ]]; then
-    local=$1
-    remote=$local
+    local=$(cd "$(dirname "$1")" 2>/dev/null && pwd)/$(basename "$1")
+    remote="$local"
     echo "Copying $local to el@cloud:$remote"
-    scp -P 50100 $local el@cloud:$remote
+    scp -C -P 50100 "$local" el@cloud:"$remote"
     return $?
   elif [[ -d $1 ]]; then
-    1=$(cd $1 &> /dev/null && pwd)
-    echo "Copying ${1} to el@slice:${2:=$1}"
-    scp -P 50100 -r $1 el@slice:${2}
+    local=$(cd "$(dirname $1)" 2>/dev/null && pwd)/$(basename "$1")
+    remote="$local"
+    echo "Copying $local to el@cloud:$remote"
+    scp -C -P 50100 -r "$local" el@cloud:"$remote"
     return $?
   else
     echo "Please specify a file or directory"
     return 1
   fi
 }
+
+cptohome() {
+  if [[ -f $1 ]]; then
+    local=$(cd "$(dirname "$1")" 2>/dev/null && pwd)/$(basename "$1")
+    remote="$local"
+    echo "Copying $local to el@elecompte.com:$remote"
+    scp -C -P 50100 "$local" el@elecompte.com:"$remote"
+    return $?
+  elif [[ -d $1 ]]; then
+    local=$(cd "$(dirname $1)" 2>/dev/null && pwd)/$(basename "$1")
+    remote="$local"
+    echo "Copying $local to el@elecompte.com:$remote"
+    scp -C -P 50100 -r "$local" el@elecompte.com:"$remote"
+    return $?
+  else
+    echo "Please specify a file or directory"
+    return 1
+  fi
+}
+
 
 join_avi() {
   mencoder -forceidx -oac copy -ovc copy $1 -o $2
