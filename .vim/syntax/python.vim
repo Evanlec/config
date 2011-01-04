@@ -130,6 +130,8 @@ syn match pythonError		"\<\d\+\D\+\>" display
 syn match pythonError		"[$?]" display
 syn match pythonError		"[&|]\{2,}" display
 syn match pythonError		"[=]\{3,}" display
+syn match pythonError "^\s*def\s\+\w\+(.*)\s*$" display
+syn match pythonError "^\s*class\s\+\w\+(.*)\s*$" display
 
 " TODO: Mixing spaces and tabs also may be used for pretty formatting multiline
 " statements. For now I don't know how to work around this.

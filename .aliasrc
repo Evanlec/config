@@ -182,3 +182,5 @@ alias nethack='telnet nethack.alt.org'
 alias diablo2='wine /home/el/.wine/drive_c/Program\ Files/Diablo\ II/Diablo\ II.exe'
 alias war3='wine /home/el/.wine/drive_c/Program\ Files/Warcraft\ III/war3.exe'
 #}}}
+
+alias mysql='mysql --user=root --password=django'

@@ -30,7 +30,7 @@ xcompmgr -cC -r7 -o.65 -l-10 -t-8 &
 nvclock -f -F auto -m 900 -n 600 -a flipping=0 -a quality=2 &
 
 #nvidia-settings -a InitialPixmapPlacement=2 -a GlyphCache=1 
-#sudo nvidia-settings --load-config-only &
+sudo nvidia-settings --load-config-only &
 
 #trayer --expand true --widthtype request --height 16 --edge bottom --align left --transparent true --alpha 255 &
 #tint2 &
@@ -39,6 +39,7 @@ xset m 7/5 1 &
 xset r rate 200 70 &
 numlockx &
 #iwconfig wlan0 rate 54M & # Fix wifi speed
+tilda &
 
 #****Window Manager Selection****
 

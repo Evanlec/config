@@ -12,6 +12,11 @@ set mouse=a
 set ttymouse=xterm2
 
 set ttimeoutlen=100
+" Auto change dir to currently open file
+set autochdir
+
+"Set terminal title
+set title
 
 set iskeyword+=_,$,@,%,# " none of these should be word dividers, so make them not be
 set iskeyword-=/
@@ -153,6 +158,7 @@ function! SetCursorPosition()
     end
 endfunction
 
+
 "}}}
 
 "{{{ -[ FileTypes ]-
@@ -180,7 +186,31 @@ autocmd FileType php set noet
 autocmd FileType python let python_highlight_all = 1
 autocmd FileType python let python_slow_sync = 1
 autocmd FileType python set expandtab ai shiftwidth=4 softtabstop=4 tabstop=4
-"autocmd FileType python setlocal omnifunc=pysmell#Complete
+autocmd FileType python set omnifunc=pythoncomplete#Complete
+" type :make to see syntax errors
+autocmd BufRead *.py set makeprg=python\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
+autocmd BufRead *.py set efm=%C\ %.%#,%A\ \ File\ \"%f\"\,\ line\ %l%.%#,%Z%[%^\ ]%\@=%m
+
+" {{{ Python class library jumping (use gf on import statements)
+
+python << EOF
+
+import os
+
+import sys
+
+import vim
+
+for p in sys.path:
+
+    if os.path.isdir(p):
+
+        vim.command(r"set path+=%s" % (p.replace(" ", r"\ ")))
+
+EOF
+"}}}
+
+set tags+=$HOME/.vim/tags/python.ctags
 
 " LaTeX
 autocmd Filetype tex,latex set grepprg=grep\ -nH\ $
@@ -240,6 +270,10 @@ nnoremap <C-y> 6<C-y>
 
 "map to bufexplorer
 nnoremap <C-B> :BufExplorer<cr>
+
+"Omnicompletion
+inoremap <Nul> <C-x><C-o>
+
 " }}}
 
 "{{{ -[ Plugins and Scripts ]-

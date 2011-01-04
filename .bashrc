@@ -1,17 +1,20 @@
-#load colors
-source $HOME/.bash/colors
-
-PS1="\[$txtblu\]\u@\h \[\033[36m\]\W \$: \[\033[00m\]"
-
-# cgroups patch thingy
-# if [ "$PS1" ] ; then  
-    # mkdir -m 0700 /sys/fs/cgroup/cpu/user/$$
-    # echo $$ > /sys/fs/cgroup/cpu/user/$$/tasks
-# fi
-
+# If not running interactively, don't do anything
 if [ -z "$PS1" ]; then
 	return
 fi
+
+#load colors
+source $HOME/.bash/colors
+
+#adds some nice version-control stuff to prompt
+vcprompt() {
+    /usr/bin/vcprompt -f $' on \033[34m%n\033[00m:\033[00m%[unknown]b\033[32m%m%u'
+}
+
+export PS1="\[$txtblu\]\u@\h \[\033[36m\]\W \$: \[\033[00m\]"
+
+
+
 # stop wine making file associations
 export WINEDLLOVERRIDES='winemenubuilder.exe=d'
 
@@ -25,6 +28,8 @@ export TERM="rxvt-unicode"
 export EDITOR="vim"
 export BROWSER="google-chrome"
 export PAGER="less"
+export GREP_OPTIONS='--color=auto' 
+export GREP_COLOR='1;32'
 
 # bogus
 if [ -f /unix ] ; then	
