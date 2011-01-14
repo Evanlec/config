@@ -244,8 +244,8 @@ nnoremap <silent> <F4> :NERDTreeToggle<CR>
 inoremap <silent> <F4> <esc>:NERDTreeToggle<CR>
 
 " Fuzzyfinder
-nnoremap <silent> <F3> :FuzzyFinderFile<CR>
-inoremap <silent> <F3> <esc>:FuzzyFinderFile<CR>
+nnoremap <silent> <F3> :FufFile<CR>
+inoremap <silent> <F3> <esc>:FufFile<CR>
 
 " :wq shortcuts
 nnoremap <silent> <F5> :w<CR>
