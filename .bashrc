@@ -6,14 +6,7 @@ fi
 #load colors
 source $HOME/.bash/colors
 
-#adds some nice version-control stuff to prompt
-vcprompt() {
-    /usr/bin/vcprompt -f $' on \033[34m%n\033[00m:\033[00m%[unknown]b\033[32m%m%u'
-}
-
 export PS1="\[$txtblu\]\u@\h \[\033[36m\]\W \$: \[\033[00m\]"
-
-
 
 # stop wine making file associations
 export WINEDLLOVERRIDES='winemenubuilder.exe=d'
@@ -24,19 +17,13 @@ shopt -s cdspell
 shopt -s extglob
 
 #environment variables
-export TERM="rxvt-unicode"
+#export TERM="rxvt-unicode"
 export EDITOR="vim"
 export BROWSER="google-chrome"
 export PAGER="less"
 export GREP_OPTIONS='--color=auto' 
 export GREP_COLOR='1;32'
 
-# bogus
-if [ -f /unix ] ; then	
-	alias ls='/bin/ls -CF'
-else
-	alias ls='/bin/ls -F'
-fi
 
 # burn it {{{
 #
@@ -67,7 +54,6 @@ burn_iso() {
 
 # }}}
 
-
 # load my aliases
 source /home/el/.aliasrc
 
@@ -77,6 +63,11 @@ fi
 
 HISTIGNORE="[   ]*:&:bg:fg"
 
+
+#adds some nice version-control stuff to prompt
+vcprompt() {
+    /usr/bin/vcprompt -f $' on \033[34m%n\033[00m:\033[00m%[unknown]b\033[32m%m%u'
+}
 
 sprunge() {
    URI=$(curl -s -F "sprunge=<-" http://sprunge.us)
