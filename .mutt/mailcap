@@ -1,0 +1,2 @@
+text/html;    w3m -dump %s; nametemplate=%s.html; copiousoutput
+image/*;      feh %s
