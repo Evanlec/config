@@ -186,7 +186,7 @@ autocmd FileType php set noet
 autocmd FileType python let python_highlight_all = 1
 autocmd FileType python let python_slow_sync = 1
 autocmd FileType python set expandtab ai shiftwidth=4 softtabstop=4 tabstop=4
-autocmd FileType python set omnifunc=pythoncomplete#Complete
+" autocmd FileType python set omnifunc=pythoncomplete#Complete
 " type :make to see syntax errors
 autocmd BufRead *.py set makeprg=python\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
 autocmd BufRead *.py set efm=%C\ %.%#,%A\ \ File\ \"%f\"\,\ line\ %l%.%#,%Z%[%^\ ]%\@=%m
@@ -210,7 +210,7 @@ for p in sys.path:
 EOF
 "}}}
 
-set tags+=$HOME/.vim/tags/python.ctags
+"set tags+=$HOME/.vim/tags/python.ctags
 
 " LaTeX
 autocmd Filetype tex,latex set grepprg=grep\ -nH\ $
@@ -272,11 +272,15 @@ nnoremap <C-y> 6<C-y>
 nnoremap <C-B> :BufExplorer<cr>
 
 "Omnicompletion
-inoremap <Nul> <C-x><C-o>
+"inoremap <Nul> <C-x><C-o>
 
 " }}}
 
 "{{{ -[ Plugins and Scripts ]-
+
+"Pydiction
+let g:pydiction_location = '/home/el/.vim/ftplugin/pydiction/complete-dict'
+
 " taglist
 let Tlist_Use_Right_Window = 1
 let Tlist_Compart_Format = 1
