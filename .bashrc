@@ -55,7 +55,7 @@ burn_iso() {
 # }}}
 
 # load my aliases
-source /home/el/.aliasrc
+source $HOME/.aliasrc
 
 if [ -z "$HOST" ] ; then
 	export HOST=${HOSTNAME}
