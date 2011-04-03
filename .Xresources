@@ -33,7 +33,7 @@ URxvt*urgentOnBell: true
 URxvt*buffered: true
 !URxvt*background: rgba:0000/0000/0000/9999
 !URxvt*foreground: White 
-urxvt.foreground: #eeeeee
+urxvt.foreground: #BDBDBD
 URxvt.background: rgba:0000/0000/0000/bbbb
 URxvt*background: black
 URxvt*transparent: false
