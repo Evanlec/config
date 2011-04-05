@@ -65,7 +65,7 @@ alias g='gvim --remote-silent'
 alias svd='svdiff'
 alias xorg="sudo vim /etc/X11/xorg.conf"
 alias rc='sudo vim /etc/rc.conf'
-alias xde='vim ~/.Xdefaults'
+alias xde='vim ~/.Xresources'
 alias fonts='vim ~/.fonts.conf'
 alias aw='vim ~/.config/awesome/rc.lua'
 alias sv='sudoedit'
@@ -184,3 +184,5 @@ alias war3='wine /home/el/.wine/drive_c/Program\ Files/Warcraft\ III/war3.exe'
 #}}}
 
 alias mysql='mysql --user=root --password=django'
+alias wmfsrc='vim /home/el/.config/wmfs/wmfsrc'
+alias listfonts="fc-list | sed 's,:.*,,' | sort -u"

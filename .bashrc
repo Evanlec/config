@@ -4,65 +4,38 @@ if [ -z "$PS1" ]; then
 fi
 
 #load colors
-source $HOME/.bash/colors
+source $HOME/.bash_colors
+
+#load infinality-settings
+source $HOME/.infinality-settings
 
 export PS1="\[$txtblu\]\u@\h \[\033[36m\]\W \$: \[\033[00m\]"
 
-# stop wine making file associations
-export WINEDLLOVERRIDES='winemenubuilder.exe=d'
-
 # set options
-shopt -s autocd
-shopt -s cdspell
-shopt -s extglob
+shopt -s autocd cdspell dirspell extglob globstar histverify no_empty_cmd_completion
 
-#environment variables
-#export TERM="rxvt-unicode"
-export EDITOR="vim"
-export BROWSER="google-chrome"
-export PAGER="less"
-export GREP_OPTIONS='--color=auto' 
-export GREP_COLOR='1;32'
+# External config
+[[ -r ~/.dircolors && -x /bin/dircolors ]] && eval $(dircolors -b ~/.dircolors)
+[[ -r ~/.aliasrc ]] && . ~/.aliasrc
+[[ -z $BASH_COMPLETION && -r /etc/bash_completion ]] && . /etc/bash_completion
 
+# more for less
+LESS=-R # use -X to avoid sending terminal initialization
+LESS_TERMCAP_mb=$'\e[01;31m'
+LESS_TERMCAP_md=$'\e[01;31m'
+LESS_TERMCAP_me=$'\e[0m'
+LESS_TERMCAP_se=$'\e[0m'
+LESS_TERMCAP_so=$'\e[01;44;33m'
+LESS_TERMCAP_ue=$'\e[0m'
+LESS_TERMCAP_us=$'\e[01;32m'
+export ${!LESS@}
 
-# burn it {{{
-#
-# burns an iso to disc
-burn_iso() {
-  local iso="$1"
-
-  [ -e "$iso" ] || errorout "$1 does not exist"
-
-  # removed hal-device
-  # sets $type as CD/DVD
-  #check_disc_type
-  type="${type:-DVD}"
-  # removed hal-device
-
-  logger 'burning iso...'
-  case "$type" in
-    CD)  cdrecord -v speed=48 dev=$dev "$iso" 2>/dev/null ;;
-    DVD) growisofs -dvd-compat -Z $dev="$iso" 2>/dev/null ;;
-  esac
-
-  ret=$?
-
-  # wait, eject, and exit
-  sleep 5 && eject "$dev"
-  exit $ret
-}
-
-# }}}
-
-# load my aliases
-source $HOME/.aliasrc
-
-if [ -z "$HOST" ] ; then
-	export HOST=${HOSTNAME}
-fi
-
-HISTIGNORE="[   ]*:&:bg:fg"
-
+# history
+HISTIGNORE="&:ls:[bf]g:exit:reset:clear:cd*"
+HISTCONTROL="ignoreboth:erasedups"
+HISTSIZE=1000
+HISTFILESIZE=2000
+export ${!HIST@}
 
 #adds some nice version-control stuff to prompt
 vcprompt() {
@@ -74,9 +47,8 @@ sprunge() {
    # if stdout is not a tty, suppress trailing newline
    if [[ ! -t 1 ]] ; then local FLAGS='-n' ; fi
    echo $FLAGS $URI
+   echo $URI | xclip -selection clipboard
 }
-
-
 
 svdiff()
 {
@@ -87,6 +59,11 @@ svdiff()
 psgrep()
 {
 	ps -aux | grep $1 | grep -v grep
+}
+
+tbt()
+{
+    rdesktop -u 'elecompte' -p 'W3stside' -g 1280x1024 -z -x broadband tbtdomain.info:50200
 }
 
 #
@@ -103,10 +80,6 @@ pskill()
 	echo "slaughtered."
 }
 
-
-# prompt with color
-#source $HOME/.bashprompt
-
 term()
 {
         TERM=$1
@@ -117,18 +90,6 @@ term()
 xtitle () 
 { 
 	echo -n -e "\033]0;$*\007"
-}
-
-cd() {
-    if [ $# -ne 1 ]; then builtin cd;
-    else
-        if [ -f $1 ]; then
-            builtin cd $(dirname $1)
-            $EDITOR $(basename $1)
-       else
-            builtin cd $1
-        fi
-    fi
 }
 
 bold()
@@ -166,13 +127,33 @@ watch()
         fi
 }
 
-#
-#       Remote login passing all 8 bits (so meta key will work)
-#
-rl()
-{
-        rlogin $* -8
+# burn_iso() {{{
+# burns an iso to disc
+burn_iso() {
+  local iso="$1"
+
+  [ -e "$iso" ] || errorout "$1 does not exist"
+
+  # removed hal-device
+  # sets $type as CD/DVD
+  #check_disc_type
+  type="${type:-DVD}"
+  # removed hal-device
+
+  logger 'burning iso...'
+  case "$type" in
+    CD)  cdrecord -v speed=48 dev=$dev "$iso" 2>/dev/null ;;
+    DVD) growisofs -dvd-compat -Z $dev="$iso" 2>/dev/null ;;
+  esac
+
+  ret=$?
+
+  # wait, eject, and exit
+  sleep 5 && eject "$dev"
+  exit $ret
 }
+
+# }}}
 
 function setenv()
 {
@@ -230,6 +211,8 @@ extract () {
         gunzip $1
     elif [[ $lower == *.tar.bz2 || $lower == *.tbz ]]; then
         tar xvjf $1
+    elif [[ $lower == *.tar.xz ]]; then
+        xz -d $1
     elif [[ $lower == *.bz2 ]]; then
         bunzip2 $1
     elif [[ $lower == *.zip ]]; then
@@ -240,6 +223,10 @@ extract () {
         tar xvf $1
     elif [[ $lower == *.lha ]]; then
         lha e $1
+    elif [[ $lower == *.lrz ]]; then
+        lrzip e $1
+    elif [[ $lower == *.tar.lrz ]]; then
+        lrztar -d $1
     else
         print "Unknown archive type: $1"
         return 1
@@ -291,7 +278,7 @@ upload() {
   if [[ -f $1 ]]; then
     echo "Uploading $1 to el@slice:/var/www/lets-talk.org/html/upload/$1"
     scp -P 50100 $1 el@slice:/var/www/lets-talk.org/html/upload/$1
-    echo "http://lets-talk.org/upload/$1" | xclip
+    echo "http://lets-talk.org/upload/$1" | xclip -selection clipboard
     xclip -o
     return $?
   elif [[ -d $1 ]]; then
@@ -324,25 +311,6 @@ cptoslice() {
   fi
 }
 
-cptocloud() {
-  if [[ -f $1 ]]; then
-    local=$(cd "$(dirname "$1")" 2>/dev/null && pwd)/$(basename "$1")
-    remote="$local"
-    echo "Copying $local to el@cloud:$remote"
-    scp -C -P 50100 "$local" el@cloud:"$remote"
-    return $?
-  elif [[ -d $1 ]]; then
-    local=$(cd "$(dirname $1)" 2>/dev/null && pwd)/$(basename "$1")
-    remote="$local"
-    echo "Copying $local to el@cloud:$remote"
-    scp -C -P 50100 -r "$local" el@cloud:"$remote"
-    return $?
-  else
-    echo "Please specify a file or directory"
-    return 1
-  fi
-}
-
 cptohome() {
   if [[ -f $1 ]]; then
     local=$(cd "$(dirname "$1")" 2>/dev/null && pwd)/$(basename "$1")
@@ -361,7 +329,6 @@ cptohome() {
     return 1
   fi
 }
-
 
 join_avi() {
   mencoder -forceidx -oac copy -ovc copy $1 -o $2
