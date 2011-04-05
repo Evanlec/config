@@ -329,6 +329,7 @@
 
         [key] mod = {"Super"} key = "t" func = "spawn" cmd = "urxvtc -name scratchpad -geometry 64x40+480+34" [/key]
         [key] mod = {"Super"} key = "u" func = "spawn" cmd = "chromium" [/key]
+        [key] mod = {"Super"} key = "f" func = "spawn" cmd = "firefox" [/key]
         [key] mod = {"Super"} key = "g" func = "spawn" cmd = "gvim" [/key]
         # Kill the selected client.
         [key] mod = {"Super"} key = "x" func = "client_kill" [/key]
