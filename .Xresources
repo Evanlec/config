@@ -15,7 +15,8 @@ Xft.rgba: rgb
 !*boldFont: -*-terminus-medium-*-*-*-12-*-*-*-*-*-*-*
 !urxvt.font: xft:Inconsolata:pixelsize=15
 !urxvt.boldFont:	xft:Inconsolata:bold:pixelsize=15
-*font: xft:Menlo:size=10:antialias=true
+URxvt.font: xft:Menlo-11:antialias=false
+#URxvt.font:xft:Liberation Mono-10:antialias=false
 !*boldFont: xft:Menlo bold:size=10
 
 !Main rxvt options
