@@ -1,13 +1,12 @@
 #!/bin/bash
 #Screenshot Script
 cd /home/el/pic/shots;
-today=`eval date +%Y-%m-%d-%T`;
+today=`eval date +%Y-%m-%d-%S`;
 file=$today".png"
-scrot $file $@ -q 75 -e 'echo $f | xclip'; 
-echo $file" Saved";
+scrot $file $@ -q 75; 
 sleep 1
-#echo $file
-#scp -P 50100 $file el@copperbeechjewelry.com:/var/www/lets-talk.org/html/shots/$file
-#echo "http://lets-talk.org/shots/$file" | xclip;
-#echo $file;
+scp -P 50100 $file slice:/var/www/lets-talk.org/html/public/$file
+echo "http://lets-talk.org/public/$file" | xclip -selection clipboard;
+echo "http://lets-talk.org/public/$file" | xclip;
+echo $file" Uploaded to: "`xclip -selection clipboard -o`;
 exit 0
