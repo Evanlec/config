@@ -12,11 +12,8 @@ set mouse=a
 set ttymouse=xterm2
 
 set ttimeoutlen=100
-" Auto change dir to currently open file
-set autochdir
 
-"Set terminal title
-set title
+set fileencodings=ucs-bom,utf-8,windows-1252,default
 
 set iskeyword+=_,$,@,%,# " none of these should be word dividers, so make them not be
 set iskeyword-=/
@@ -31,6 +28,9 @@ set ttyscroll=1
 let loaded_matchparen = 1
 
 set viminfo='20,<50,s10,h,%
+"new persistent undo feature (vim 7.3)
+set undofile
+set undodir=~/.vim/undo
 
 " extended % matching
 runtime macros/matchit.vim
@@ -53,8 +53,8 @@ filetype on
 filetype plugin on
 filetype indent on
 set tabstop=8
-set shiftwidth=4
-set softtabstop=4
+set shiftwidth=2
+set softtabstop=2
 set copyindent
 set shiftround " when at 3 spaces, and I hit > ... go to 4, not 5
 set expandtab
@@ -70,25 +70,22 @@ set clipboard+=unnamed
 " make Ctrl-C behave like in windows
 vnoremap <C-c> "+y
 
-"{{{ -[ Look ]-
+" {{{ -[ Look ]-
 " general
 syntax on
 set showcmd
 set showmode
 set number
 set foldmethod=marker
-set cursorline
+set nocursorline
 set foldcolumn=2
 " colours
 set t_Co=256
-set diffopt=vertical
 if &diff
-  color inkpot
+  color candycode
 else
-  color ir_black
+  color candycode
 endif
-"some other favorite colorschemes:
-"jellybeans, zenburn, candycode
 " }}}
 
 "scroll off settings
@@ -100,7 +97,7 @@ set shortmess=atI " shorten message prompts a bit
 set mousehide "hide mouse when typing
 
 "{{{ statusline setup
-set statusline=%F "full path of the filename
+set statusline=%{getcwd()}\ %-10F
  
 "display a warning if fileformat isnt unix
 set statusline+=%#warningmsg#
@@ -127,20 +124,15 @@ set statusline+=%*
 set statusline+=%#error#
 set statusline+=%{&paste?'[paste]':''}
 set statusline+=%*
+
+set statusline+=%(\ %{fugitive#statusline()}%)
  
 set statusline+=%= "left/right separator
-set statusline+=line:%l/%L "cursor line/total lines
+set statusline+=%c, "cursor column
+set statusline+=%l/%L "cursor line/total lines
 set statusline+=\ %P "percent through file
 set laststatus=2
 "}}}
-
-"{{{ -[ AutoCmds ]-
-
-autocmd winleave * setl nocursorline
-autocmd winenter * setl cursorline
-
-" When vimrc is edited, reload it
-autocmd! bufwritepost vimrc source $MYVIMRC
 
 " Stop auto-commenting
 au FileType * set comments=
@@ -158,8 +150,8 @@ function! SetCursorPosition()
     end
 endfunction
 
-
-"}}}
+" When vimrc is edited, reload it (have yet to see this actually work)
+autocmd! bufwritepost vimrc source $MYVIMRC
 
 "{{{ -[ FileTypes ]-
 " Jump to last known cursor position
@@ -175,42 +167,22 @@ autocmd FileType mail,human set formatoptions+=t textwidth=72
 
 " PHP
 let php_baselib = 1
-let php_folding = 1
-"let php_sync_method = 3
+let php_folding = 0
 let php_sql_query = 1
-autocmd FileType php set shiftwidth=4 softtabstop=4 tabstop=4
+let php_html_in_strings = 1
+let php_no_shorttags = 0
+let php_sync_method = 1
+autocmd FileType php set shiftwidth=2 softtabstop=2 tabstop=2
 autocmd FileType php set noet
 
+" C
+autocmd FileType c set expandtab ai shiftwidth=4 softtabstop=4 tabstop=4
 
 " Python
 autocmd FileType python let python_highlight_all = 1
 autocmd FileType python let python_slow_sync = 1
 autocmd FileType python set expandtab ai shiftwidth=4 softtabstop=4 tabstop=4
-" autocmd FileType python set omnifunc=pythoncomplete#Complete
-" type :make to see syntax errors
-autocmd BufRead *.py set makeprg=python\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
-autocmd BufRead *.py set efm=%C\ %.%#,%A\ \ File\ \"%f\"\,\ line\ %l%.%#,%Z%[%^\ ]%\@=%m
-
-" {{{ Python class library jumping (use gf on import statements)
-
-python << EOF
-
-import os
-
-import sys
-
-import vim
-
-for p in sys.path:
-
-    if os.path.isdir(p):
-
-        vim.command(r"set path+=%s" % (p.replace(" ", r"\ ")))
-
-EOF
-"}}}
-
-"set tags+=$HOME/.vim/tags/python.ctags
+"autocmd FileType python setlocal omnifunc=pysmell#Complete
 
 " LaTeX
 autocmd Filetype tex,latex set grepprg=grep\ -nH\ $
@@ -244,8 +216,8 @@ nnoremap <silent> <F4> :NERDTreeToggle<CR>
 inoremap <silent> <F4> <esc>:NERDTreeToggle<CR>
 
 " Fuzzyfinder
-nnoremap <silent> <F3> :FufFile<CR>
-inoremap <silent> <F3> <esc>:FufFile<CR>
+nnoremap <silent> <F3> :FuzzyFinderFile<CR>
+inoremap <silent> <F3> <esc>:FuzzyFinderFile<CR>
 
 " :wq shortcuts
 nnoremap <silent> <F5> :w<CR>
@@ -254,8 +226,6 @@ nnoremap <silent> <F6> :wq<CR>
 inoremap <silent> <F6> <esc>:wq<CR>
 nnoremap <silent> <F7> :wqa<CR>
 inoremap <silent> <F7> <esc>:wqa<CR>
-" Write to non-writable files anyhow! damnit!
-cmap w!! %!sudo tee > /dev/null %
 
 " Most Recently Used Files (MRU)
 nnoremap <silent> <F12> :MRU<CR>
@@ -265,22 +235,22 @@ inoremap <silent> <F12> <esc>:MRU<CR>
 nnoremap <C-e> 6<C-e>
 nnoremap <C-y> 6<C-y>
 
-"map <Right> :bnext<CR>
-"map <Left> :bprev<CR>
+map <Right> :bnext<CR>
+map <Left> :bprev<CR>
 
 "map to bufexplorer
 nnoremap <C-B> :BufExplorer<cr>
 
-"Omnicompletion
-"inoremap <Nul> <C-x><C-o>
+"Django surround plugin mappings
+let g:surround_{char2nr("b")} = "{% block\1 \r..*\r &\1%}\r{% endblock %}"
+let g:surround_{char2nr("i")} = "{% if\1 \r..*\r &\1%}\r{% endif %}"
+let g:surround_{char2nr("w")} = "{% with\1 \r..*\r &\1%}\r{% endwith %}"
+let g:surround_{char2nr("c")} = "{% comment\1 \r..*\r &\1%}\r{% endcomment %}"
+let g:surround_{char2nr("f")} = "{% for\1 \r..*\r &\1%}\r{% endfor %}"
 
 " }}}
 
 "{{{ -[ Plugins and Scripts ]-
-
-"Pydiction
-let g:pydiction_location = '/home/el/.vim/ftplugin/pydiction/complete-dict'
-
 " taglist
 let Tlist_Use_Right_Window = 1
 let Tlist_Compart_Format = 1
@@ -292,11 +262,53 @@ let tlist_php_settings = 'php;c:class;f:Functions'
 let g:fuzzy_roots = ['/home/el']
 
 "NerdTree settings
-let NERDTreeHighlightCursorline = 1
+"let NERDTreeHighlightCursorline = 1
 let NERDTreeChDirMode = 2
-let NERDTreeIgnore=['\.db$', '\~$', '\.pyc$', '^__init__\.py$']
+let NERDTreeIgnore=['\.db$', '\~$', '\.pyc$', '^__init__\.py$', '\.jpg$', '\.gif$', '\.png$', '\.pdf$']
 let NerdTreeMouseMode = 2
 
 "Load templates
 autocmd BufNewFile *.html  0r ~/.vim/skeleton.html
 " }}}
+"{{{ User Commands
+command! Snip :new /home/el/.vim/snippets/php.snippets
+
+command! -nargs=+ Grep :grep -r --include=*.php --exclude-dir=blog --exclude-dir=wp --exclude-dir=phpMyAdmin '<args>' /home/el/daddys
+
+"}}}
+
+" Django file jumping
+let g:last_relative_dir = ''
+nnoremap \1 :call RelatedFile ("models.py")<cr>
+nnoremap \2 :call RelatedFile ("views.py")<cr>
+nnoremap \3 :call RelatedFile ("urls.py")<cr>
+nnoremap \4 :call RelatedFile ("admin.py")<cr>
+nnoremap \5 :call RelatedFile ("tests.py")<cr>
+nnoremap \6 :call RelatedFile ( "templates/" )<cr>
+nnoremap \7 :call RelatedFile ( "templatetags/" )<cr>
+nnoremap \8 :call RelatedFile ( "management/" )<cr>
+nnoremap \0 :e settings.py<cr>
+nnoremap \9 :e urls.py<cr>
+
+fun! RelatedFile(file)
+    "This is to check that the directory looks djangoish
+    if filereadable(expand("%:h"). '/models.py') || isdirectory(expand("%:h") . "/templatetags/")
+        exec "edit %:h/" . a:file
+        let g:last_relative_dir = expand("%:h") . '/'
+        return ''
+    endif
+    if g:last_relative_dir != ''
+        exec "edit " . g:last_relative_dir . a:file
+        return ''
+    endif
+    echo "Cant determine where relative file is : " . a:file
+    return ''
+endfun
+
+fun SetAppDir()
+    if filereadable(expand("%:h"). '/models.py') || isdirectory(expand("%:h") . "/templatetags/")
+        let g:last_relative_dir = expand("%:h") . '/'
+        return ''
+    endif
+endfun
+autocmd BufEnter *.py call SetAppDir()

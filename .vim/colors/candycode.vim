@@ -162,7 +162,7 @@ hi Ignore       guifg=#888888       guibg=NONE          gui=NONE
             \   ctermfg=darkgray    ctermbg=NONE        cterm=NONE
 
 hi Error        guifg=#ffffff       guibg=#ff0000       gui=NONE
-            \   ctermfg=white       ctermbg=red         cterm=NONE
+            \   ctermfg=black       ctermbg=red         cterm=NONE
 
 hi Todo         guifg=#ffffff       guibg=#ee7700       gui=bold
             \   ctermfg=black       ctermbg=yellow      cterm=bold
