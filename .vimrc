@@ -235,9 +235,6 @@ inoremap <silent> <F12> <esc>:MRU<CR>
 nnoremap <C-e> 6<C-e>
 nnoremap <C-y> 6<C-y>
 
-map <Right> :bnext<CR>
-map <Left> :bprev<CR>
-
 "map to bufexplorer
 nnoremap <C-B> :BufExplorer<cr>
 
