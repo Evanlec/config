@@ -23,7 +23,7 @@ set listchars=tab:>-,trail:-
 set hidden
 
 "maybe these speed things up?
-set ttyfast 
+set ttyfast
 set ttyscroll=1
 let loaded_matchparen = 1
 
@@ -98,35 +98,35 @@ set mousehide "hide mouse when typing
 
 "{{{ statusline setup
 set statusline=%{getcwd()}\ %-10F
- 
+
 "display a warning if fileformat isnt unix
 set statusline+=%#warningmsg#
 set statusline+=%{&ff!='unix'?'['.&ff.']':''}
 set statusline+=%*
- 
+
 "display a warning if file encoding isnt utf-8
 set statusline+=%#warningmsg#
 set statusline+=%{(&fenc!='utf-8'&&&fenc!='')?'['.&fenc.']':''}
 set statusline+=%*
- 
+
 set statusline+=%h "help file flag
 set statusline+=%y "filetype
 set statusline+=%r "read only flag
 set statusline+=%m "modified flag
- 
+
 set statusline+=%*
- 
- 
+
+
 set statusline+=%#warningmsg#
 set statusline+=%*
- 
+
 "display a warning if &paste is set
 set statusline+=%#error#
 set statusline+=%{&paste?'[paste]':''}
 set statusline+=%*
 
 set statusline+=%(\ %{fugitive#statusline()}%)
- 
+
 set statusline+=%= "left/right separator
 set statusline+=%c, "cursor column
 set statusline+=%l/%L "cursor line/total lines
@@ -267,11 +267,34 @@ let NerdTreeMouseMode = 2
 "Load templates
 autocmd BufNewFile *.html  0r ~/.vim/skeleton.html
 " }}}
+
 "{{{ User Commands
 command! Snip :new /home/el/.vim/snippets/php.snippets
 
 command! -nargs=+ Grep :grep -r --include=*.php --exclude-dir=blog --exclude-dir=wp --exclude-dir=phpMyAdmin '<args>' /home/el/daddys
 
+function! ShowSpaces(...)
+  let @/='\v(\s+$)|( +\ze\t)'
+  let oldhlsearch=&hlsearch
+  if !a:0
+    let &hlsearch=!&hlsearch
+  else
+    let &hlsearch=a:1
+  end
+  return oldhlsearch
+endfunction
+
+function! TrimSpaces() range
+  let oldhlsearch=ShowSpaces(1)
+  execute a:firstline.",".a:lastline."substitute ///gec"
+  let &hlsearch=oldhlsearch
+endfunction
+
+command! -bar -nargs=? ShowSpaces call ShowSpaces(<args>)
+command! -bar -nargs=0 -range=% TrimSpaces <line1>,<line2>call TrimSpaces()
+nnoremap <Leader>,     :ShowSpaces 1<CR>
+nnoremap <Leader>.   m`:TrimSpaces<CR>``
+vnoremap <Leader>.   :TrimSpaces<CR>
 "}}}
 
 " Django file jumping
@@ -302,7 +325,7 @@ fun! RelatedFile(file)
     return ''
 endfun
 
-fun SetAppDir()
+fun! SetAppDir()
     if filereadable(expand("%:h"). '/models.py') || isdirectory(expand("%:h") . "/templatetags/")
         let g:last_relative_dir = expand("%:h") . '/'
         return ''
