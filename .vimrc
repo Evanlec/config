@@ -187,7 +187,7 @@ autocmd FileType c set expandtab ai shiftwidth=4 softtabstop=4 tabstop=4
 autocmd FileType python let python_highlight_all = 1
 autocmd FileType python let python_slow_sync = 1
 autocmd FileType python set expandtab ai shiftwidth=4 softtabstop=4 tabstop=4
-"autocmd FileType python setlocal omnifunc=pysmell#Complete
+autocmd FileType python setlocal textwidth=80 formatoptions+=tc
 
 " Django file jumping
 let g:last_relative_dir = ''
