@@ -13,6 +13,7 @@ wht="\\#C0C0C0\\"
         # Collect system information 
 #    chg=$(acpi -V | awk '{ gsub(/,/, "");} NR==1 {print $4}')
 #    bat=$(grep -q "on-line" <(acpi -V) && echo $blu$chg || echo $red$chg)
+# temp=$(sensors | grep 'CPU Temp' | grep -Eo \+[0-9][0-9])
     mem=$(awk '/Mem/ {print $3}' <(free -m))
         # CPU line courtesy Procyon: https://bbs.archlinux.org/viewtopic.php?pid=661592
     cpu=$(eval $(awk '/^cpu /{print "previdle=" $5 "; prevtotal=" $2+$3+$4+$5 }' /proc/stat); sleep 0.4; 
