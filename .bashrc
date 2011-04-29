@@ -17,6 +17,7 @@ shopt -s autocd cdspell dirspell extglob globstar histverify no_empty_cmd_comple
 # External config
 [[ -r ~/.dircolors && -x /bin/dircolors ]] && eval $(dircolors -b ~/.dircolors)
 [[ -r ~/.aliasrc ]] && . ~/.aliasrc
+[[ -r ~/.aliasrc-private ]] && . ~/.aliasrc-private
 [[ -z $BASH_COMPLETION && -r /etc/bash_completion ]] && . /etc/bash_completion
 
 # more for less
@@ -37,6 +38,7 @@ HISTSIZE=1000
 HISTFILESIZE=2000
 export ${!HIST@}
 
+t() {     tmux -L main "${@:-attach}"; }
 #adds some nice version-control stuff to prompt
 vcprompt() {
     /usr/bin/vcprompt -f $' on \033[34m%n\033[00m:\033[00m%[unknown]b\033[32m%m%u'
@@ -47,7 +49,8 @@ sprunge() {
    # if stdout is not a tty, suppress trailing newline
    if [[ ! -t 1 ]] ; then local FLAGS='-n' ; fi
    echo $FLAGS $URI
-   echo $URI | xclip -selection clipboard
+   echo $URI | xclip -sel clipboard
+   echo $URI | xclip -sel primary
 }
 
 svdiff()
@@ -59,11 +62,6 @@ svdiff()
 psgrep()
 {
 	ps -aux | grep $1 | grep -v grep
-}
-
-tbt()
-{
-    rdesktop -u 'elecompte' -p 'W3stside' -g 1280x1024 -z -x broadband tbtdomain.info:50200
 }
 
 #
@@ -203,8 +201,8 @@ define() {
 
 extract () {
     local old_dirs current_dirs lower
-    lower=${(L)1}
-    old_dirs=( *(N/) )
+    lower=${1,,}
+    old_dirs=printf '%s\n' */
     if [[ $lower == *.tar.gz || $lower == *.tgz ]]; then
         tar xvzf $1
     elif [[ $lower == *.gz ]]; then
@@ -233,7 +231,7 @@ extract () {
     fi
     # Change in to the newly created directory, and
     # list the directory contents, if there is one.
-    current_dirs=( *(N/) )
+    current_dirs=printf '%s\n' */
     for i in {1..${#current_dirs}}; do
         if [[ $current_dirs[$i] != $old_dirs[$i] ]]; then
             cd $current_dirs[$i]
@@ -276,9 +274,10 @@ sanitize() {
 upload() {
 
   if [[ -f $1 ]]; then
-    echo "Uploading $1 to el@slice:/var/www/lets-talk.org/html/upload/$1"
-    scp -P 50100 $1 el@slice:/var/www/lets-talk.org/html/upload/$1
-    echo "http://lets-talk.org/upload/$1" | xclip -selection clipboard
+    echo "Uploading $1 to el@slice:/var/www/lets-talk.org/html/public/$1"
+    scp -P 50100 $1 el@slice:/var/www/lets-talk.org/html/public/$1
+    echo "http://lets-talk.org/public/$1" | xclip -selection clipboard
+    echo "http://lets-talk.org/public/$1" | xclip -selection primary
     xclip -o
     return $?
   elif [[ -d $1 ]]; then
