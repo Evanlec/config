@@ -3,32 +3,19 @@
 #{{{ remote hosts
 alias women='ssh admin@women -p 50100'
 alias slice='ssh el@lets-talk.org -p 50100'
-alias jp='lftp -u safe,zone 65.175.237.243:421'
-alias items='cd /home/el/src/python/items'
-alias selenium='ssh freelancerforge@selenium'
-alias nicotine='nicotine.py'
 #}}} 
 
 #{{{ projects
-alias elec='cd /home/el/src/python/elecompte'
-alias blog='cd /home/el/src/python/blog'
-alias art='cd /home/el/src/python/art'
-alias copper='cd /home/el/src/python/copper'
-alias course='cd /home/el/src/python/course'
 alias py='python'
 alias pysrc='cd /home/el/src/python'
-alias satchmo='cd /home/el/src/python/satchmo-trunk/satchmo'
-alias django='cd /home/el/src/python/django-trunk'
-alias pylib='cd /usr/lib/python2.6/site-packages'
+alias pylib='cd /usr/lib/python2.7/site-packages'
 #}}}
 
 # {{{ App Shortcuts
-alias startxdbg='rm awesome1 && startx > awesome1 2>&1' 
-alias lightscribe='/opt/lightscribeApplications/SimpleLabeler/./SimpleLabeler'
-alias mpdup='sudo mpdup'
+alias nicotine='nicotine.py'
 alias weechat='weechat-curses'
 # My cool diskusage command
-alias diskusage='du -h --max-depth=1 -m | sort -n -r | vimpager'
+alias diskusage='du -h --max-depth=1 -m | sort -n -r | less'
 # }}}
 
 # {{{ Git Aliases
@@ -47,13 +34,7 @@ alias git-diff='git diff --color | vimpager'
 # }}}
 
 # {{{ WINE Aliases
-alias starcraft='wine /home/el/.wine/drive_c/Program\ Files/Starcraft/StarCraft.exe'
-alias flash='wine /home/el/.wine/drive_c/Program\ Files/Macromedia/Flash\ 8/Flash.exe'
-alias civ4="wine /home/el/.wine/drive_c/Program\ Files/Firaxis\ Games/Sid\ Meier\'s\ Civilization\ 4/Beyond\ The\ Sword/Civ4BeyondSword.exe"
-alias ccna='wine /home/el/.wine/drive_c/CCNA/QueLocalware.exe'
 alias photoshop='wine /home/el/.wine/drive_c/CS2/Photoshop.exe'
-alias galciv='wine /home/el/.wine/drive_c/GalCiv2/Twilight/GC2TwilightOfTheArnor.exe'
-alias simcity='WINEDEBUG=-all env WINEPREFIX="/home/${USER}/.wine" nice -20 wine /home/el/.wine/drive_c/Program\ Files/Maxis/SimCity\ 4\ Deluxe/Apps/SimCity\ 4.exe -d:opengl -intro:off'
 # }}}
 
 # {{{ Vim aliases
@@ -72,16 +53,13 @@ alias sv='sudoedit'
 alias vd='vim -d'
 alias rc='sudo vim /etc/rc.conf'
 alias xi='vim /home/el/.xinitrc'
-alias zshrc='vim /home/el/.zshrc'
 alias zalias='vim /home/el/.aliasrc'
-alias zfunc='vim /home/el/.zsh/function'
 alias fstab='sudo vim /etc/fstab'
 # }}}
 
 # {{{ Sudo Commands
 alias s='sudo'
-alias reboot='sudo reboot'
-alias shutdown='sudo shutdown -hP now'
+# }}}
 
 
 # What harm can mount/umount do?
@@ -109,7 +87,6 @@ alias watch_wifi0='watch -n 0.5 iwconfig wifi0'
 # }}}
 
 # {{{ RDP Connections
-alias rdp-gstiles='rdesktop -u Gary -p - -g 1280x1024 -x l Xp_One'
 # }}}
 
 # {{{ shell shortcuts
@@ -150,20 +127,16 @@ alias clyde='sudo clyde'
 # }}}
 
 # {{{ Misc
-alias go='startxdbg'
-alias startx='startx --dpi 96 -nolisten udp -deferglyphs 16'
-#alias weather='weatherget -s 03046 --standard'
-alias c='cd'
+alias c='clear'
 alias exit='clear; exit'
+alias :q='exit'
 alias e815='00:14:9A:11:3A:EE'
-alias plantronics='00:03:89:49:0B:41'
 alias wanip="curl -s checkip.dyndns.org | grep -Eo '[0-9\.]+'"
 alias locate='locate -i'
 alias updatefonts='sudo fc-cache -vf'
 alias xp='xprop | grep "WM_WINDOW_ROLE\|WM_CLASS" && echo "WM_CLASS(STRING) = \"NAME\", \"CLASS\""'
 #blank the monitors
 alias blank='xset dpms force standby'
-alias :q='exit'
 # }}}
 
 #{{{ rc.d
@@ -177,12 +150,8 @@ alias htres='sudo /etc/rc.d/httpd restart'
 #}}}
 
 # {{{ Games
-alias lite='cd /home/el/src/python/lite'
 alias nethack='telnet nethack.alt.org'
-alias diablo2='wine /home/el/.wine/drive_c/Program\ Files/Diablo\ II/Diablo\ II.exe'
-alias war3='wine /home/el/.wine/drive_c/Program\ Files/Warcraft\ III/war3.exe'
 #}}}
 
-alias mysql='mysql --user=root --password=django'
 alias wmfsrc='vim /home/el/.config/wmfs/wmfsrc'
 alias listfonts="fc-list | sed 's,:.*,,' | sort -u"
