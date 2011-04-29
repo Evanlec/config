@@ -7,9 +7,9 @@ fi
 source $HOME/.bash_colors
 
 #load infinality-settings
-source $HOME/.infinality-settings
+#source $HOME/.infinality-settings
 
-export PS1="\[$txtblu\]\u@\h \[\033[36m\]\W \$: \[\033[00m\]"
+export PS1="\[$txtylw\]\u@\h \[\033[36m\]\W \$: \[\033[00m\]"
 
 # set options
 shopt -s autocd cdspell dirspell extglob globstar histverify no_empty_cmd_completion
