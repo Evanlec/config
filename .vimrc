@@ -3,6 +3,9 @@
 set nocompatible
 
 set nowrap
+set wrapmargin=5
+" searches wrap around end of file
+set wrapscan
 set linebreak
 set showbreak=>\
 
@@ -24,7 +27,7 @@ set hidden
 
 "maybe these speed things up?
 set ttyfast 
-set ttyscroll=1
+"set ttyscroll=1
 let loaded_matchparen = 1
 
 set viminfo='20,<50,s10,h,%
@@ -63,6 +66,8 @@ set smarttab
 " command mode
 set wildmenu
 set wildmode=list:longest,full
+set wildignore=.jpg,.png,.gif,.swf,.bin,.tmp
+set wildignorecase
 
 " copy / pasting
 set clipboard=unnamed
@@ -173,7 +178,7 @@ let php_html_in_strings = 1
 let php_no_shorttags = 0
 let php_sync_method = 1
 autocmd FileType php set shiftwidth=2 softtabstop=2 tabstop=2
-autocmd FileType php set noet
+autocmd FileType php set noet ft=php.javascript.html
 
 " C
 autocmd FileType c set expandtab ai shiftwidth=4 softtabstop=4 tabstop=4
@@ -183,6 +188,42 @@ autocmd FileType python let python_highlight_all = 1
 autocmd FileType python let python_slow_sync = 1
 autocmd FileType python set expandtab ai shiftwidth=4 softtabstop=4 tabstop=4
 "autocmd FileType python setlocal omnifunc=pysmell#Complete
+
+" Django file jumping
+let g:last_relative_dir = ''
+nnoremap \1 :call RelatedFile ("models.py")<cr>
+nnoremap \2 :call RelatedFile ("views.py")<cr>
+nnoremap \3 :call RelatedFile ("urls.py")<cr>
+nnoremap \4 :call RelatedFile ("admin.py")<cr>
+nnoremap \5 :call RelatedFile ("tests.py")<cr>
+nnoremap \6 :call RelatedFile ( "templates/" )<cr>
+nnoremap \7 :call RelatedFile ( "templatetags/" )<cr>
+nnoremap \8 :call RelatedFile ( "management/" )<cr>
+nnoremap \0 :e settings.py<cr>
+nnoremap \9 :e urls.py<cr>
+
+fun! RelatedFile(file)
+    "This is to check that the directory looks djangoish
+    if filereadable(expand("%:h"). '/models.py') || isdirectory(expand("%:h") . "/templatetags/")
+        exec "edit %:h/" . a:file
+        let g:last_relative_dir = expand("%:h") . '/'
+        return ''
+    endif
+    if g:last_relative_dir != ''
+        exec "edit " . g:last_relative_dir . a:file
+        return ''
+    endif
+    echo "Cant determine where relative file is : " . a:file
+    return ''
+endfun
+
+fun SetAppDir()
+    if filereadable(expand("%:h"). '/models.py') || isdirectory(expand("%:h") . "/templatetags/")
+        let g:last_relative_dir = expand("%:h") . '/'
+        return ''
+    endif
+endfun
+autocmd BufEnter *.py call SetAppDir()
 
 " LaTeX
 autocmd Filetype tex,latex set grepprg=grep\ -nH\ $
@@ -236,7 +277,7 @@ nnoremap <C-e> 6<C-e>
 nnoremap <C-y> 6<C-y>
 
 "map to bufexplorer
-nnoremap <C-B> :BufExplorer<cr>
+" nnoremap <C-B> :BufExplorer<cr>
 
 "Django surround plugin mappings
 let g:surround_{char2nr("b")} = "{% block\1 \r..*\r &\1%}\r{% endblock %}"
@@ -267,6 +308,7 @@ let NerdTreeMouseMode = 2
 "Load templates
 autocmd BufNewFile *.html  0r ~/.vim/skeleton.html
 " }}}
+
 "{{{ User Commands
 command! Snip :new /home/el/.vim/snippets/php.snippets
 
@@ -274,38 +316,3 @@ command! -nargs=+ Grep :grep -r --include=*.php --exclude-dir=blog --exclude-dir
 
 "}}}
 
-" Django file jumping
-let g:last_relative_dir = ''
-nnoremap \1 :call RelatedFile ("models.py")<cr>
-nnoremap \2 :call RelatedFile ("views.py")<cr>
-nnoremap \3 :call RelatedFile ("urls.py")<cr>
-nnoremap \4 :call RelatedFile ("admin.py")<cr>
-nnoremap \5 :call RelatedFile ("tests.py")<cr>
-nnoremap \6 :call RelatedFile ( "templates/" )<cr>
-nnoremap \7 :call RelatedFile ( "templatetags/" )<cr>
-nnoremap \8 :call RelatedFile ( "management/" )<cr>
-nnoremap \0 :e settings.py<cr>
-nnoremap \9 :e urls.py<cr>
-
-fun! RelatedFile(file)
-    "This is to check that the directory looks djangoish
-    if filereadable(expand("%:h"). '/models.py') || isdirectory(expand("%:h") . "/templatetags/")
-        exec "edit %:h/" . a:file
-        let g:last_relative_dir = expand("%:h") . '/'
-        return ''
-    endif
-    if g:last_relative_dir != ''
-        exec "edit " . g:last_relative_dir . a:file
-        return ''
-    endif
-    echo "Cant determine where relative file is : " . a:file
-    return ''
-endfun
-
-fun SetAppDir()
-    if filereadable(expand("%:h"). '/models.py') || isdirectory(expand("%:h") . "/templatetags/")
-        let g:last_relative_dir = expand("%:h") . '/'
-        return ''
-    endif
-endfun
-autocmd BufEnter *.py call SetAppDir()
