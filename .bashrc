@@ -6,10 +6,16 @@ fi
 #load colors
 source $HOME/.bash_colors
 
+source $HOME/.cdargs-bash.sh
+
 #load infinality-settings
 source $HOME/.infinality-settings
 
 export PS1="\[$txtblu\]\u@\h \[\033[36m\]\W \$: \[\033[00m\]"
+
+export CDPATH=.:~:/usr/bin:/bin:/usr/lib/python2.7/site-packages
+
+set show-all-if-ambiguous on
 
 # set options
 shopt -s autocd cdspell dirspell extglob globstar histverify no_empty_cmd_completion
@@ -39,10 +45,6 @@ HISTFILESIZE=2000
 export ${!HIST@}
 
 t() {     tmux -L main "${@:-attach}"; }
-#adds some nice version-control stuff to prompt
-vcprompt() {
-    /usr/bin/vcprompt -f $' on \033[34m%n\033[00m:\033[00m%[unknown]b\033[32m%m%u'
-}
 
 sprunge() {
    URI=$(curl -s -F "sprunge=<-" http://sprunge.us)

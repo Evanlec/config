@@ -10,13 +10,7 @@ xmodmap -e "keysym Caps_Lock = Escape"
 
 xbindkeys &
 
-#feh --bg-scale /home/el/gfx/SteelMinimal.jpg & #*****set background******
-
-#ulimit -c unlimited &
 # xcompmgr -cC -r7 -o.65 -l-10 -t-8 &
-#killall urxvtd &
-#mpd
-#zsh ./dzen/status.sh &
 
 
 #urxvtc -g 80x30+0+0 &
@@ -26,7 +20,7 @@ xbindkeys &
 
 #tint2 &
 #pypanel &
-xrdb -merge ~/.Xresources
+xrdb -merge ~/.Xdefaults
 xset m 7/5 1 &
 xset r rate 250 70 &
 numlockx &
@@ -39,7 +33,7 @@ urxvtd -q -o -f &
 #exec compiz ccp
 #exec musca
 #exec openbox-session
-xset r rate 250 70 &
+#xset r rate 250 70 &
 # exec startlxde
 # exec ck-launch-session gnome-session
 exec wmfs
