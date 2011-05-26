@@ -8,14 +8,15 @@ require("beautiful")
 require("naughty")
 require("vicious")
 require("calendar2")
+require("teardrop")
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, and wallpapers
-beautiful.init(awful.util.getdir("config") .. "/themes/dust/theme.lua")
+beautiful.init("/usr/share/awesome/themes/default/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
-terminal = "urxvtcd -g 80x30+10+40"
-browser = "google-chrome"
+terminal = "urxvtc -g 80x30+10+40"
+browser = "chromium"
 editor = os.getenv("EDITOR") or "nano"
 editor_cmd = terminal .. " -e " .. editor
 icon_theme = "/home/el/.icons/black-white_2-Style"
@@ -33,7 +34,8 @@ layouts =
 
     awful.layout.suit.fair.horizontal,
     awful.layout.suit.max,
-    awful.layout.suit.floating
+    awful.layout.suit.floating,
+    awful.layout.suit.magnifier
 }
 -- }}}
 
@@ -56,11 +58,11 @@ myawesomemenu = {
 }
 
 mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
-                                    { "Terminal", "urxvt" },
+                                    { "Terminal", terminal },
                                     { "Firefox", "firefox" },
-                                    { "Pidgin", "pidgin" },
                                     { "Chrome", "google-chrome" },
                                     { "Nicotine", "nicotine" },
+                                    { "Pidgin", "pidgin" },
                                     { "Thunar", "thunar" },
                                     { "Rhythmbox", "rhythmbox" },
                                     { "VirtualBox", "VirtualBox" },
@@ -113,11 +115,17 @@ mytaglist.buttons = awful.util.table.join(
 mytasklist = {}
 mytasklist.buttons = awful.util.table.join(
                      awful.button({ }, 1, function (c)
-                                              if not c:isvisible() then
-                                                  awful.tag.viewonly(c:tags()[1])
+                                              if c == client.focus then
+                                                  c.minimized = true
+                                              else
+                                                  if not c:isvisible() then
+                                                      awful.tag.viewonly(c:tags()[1])
+                                                  end
+                                                  -- This will also un-minimize
+                                                  -- the client, if needed
+                                                  client.focus = c
+                                                  c:raise()
                                               end
-                                              client.focus = c
-                                              c:raise()
                                           end),
                      awful.button({ }, 3, function ()
                                               if instance then
@@ -137,6 +145,7 @@ mytasklist.buttons = awful.util.table.join(
                                           end))
 
 -- }}}
+
 -- {{{ My custom widgets
 --dofile "/home/el/.config/awesome/widgets.lua"
 --}}}
@@ -167,11 +176,11 @@ for s = 1, screen.count() do
     mywibox[s].widgets = {
         {
             mytaglist[s], spacer,
+            mylayoutbox[s], spacer,
             mypromptbox[s],
             cpuwidget.widget, spacer,
             layout = awful.widget.layout.horizontal.leftright
         },
-        mylayoutbox[s],
         s == 1 and mytextclock or nil,
         s == 1 and mysystray or nil,
         mytasklist[s],
@@ -235,7 +244,6 @@ globalkeys = awful.util.table.join(
 --    awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(layouts, -1) end),
 
     -- My program
-    awful.key({ modkey, }, "f", function () awful.util.spawn("luakit") end),
     awful.key({ modkey, }, "t", function () awful.util.spawn("thunderbird") end),
     awful.key({ modkey, }, "u", function () awful.util.spawn("google-chrome") end),
     awful.key({ modkey, }, "p", function () awful.util.spawn("pidgin") end),
@@ -264,21 +272,26 @@ globalkeys = awful.util.table.join(
         end)
 )
 
--- Client awful tagging: this is useful to tag some clients and then do stuff like move to tag on them
 clientkeys = awful.util.table.join(
-    awful.key({ modkey,           }, "m",      function (c) c.fullscreen = not c.fullscreen  end),
+    awful.key({ modkey,           }, "f",      function (c) c.fullscreen = not c.fullscreen  end),
     awful.key({ modkey,		  }, "c",      function (c) c:kill()                         end),
     awful.key({ modkey,		  }, "x",      function (c) c:kill()                         end),
     awful.key({ modkey, "Shift" }, "space",  awful.client.floating.toggle                     ),
     awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
     awful.key({ modkey,           }, "o",      awful.client.movetoscreen                        ),
     awful.key({ modkey, "Shift"   }, "r",      function (c) c:redraw()                       end),
-    awful.key({ modkey,           }, "i",      function (c) c.minimized = not c.minimized    end)
---    awful.key({ modkey,           }, "m",
---        function (c)
---            c.maximized_horizontal = not c.maximized_horizontal
---            c.maximized_vertical   = not c.maximized_vertical
---        end)
+    awful.key({ modkey,           }, "t",      function (c) c.ontop = not c.ontop            end),
+    awful.key({ modkey,           }, "n",
+        function (c)
+            -- The client currently has the input focus, so it cannot be
+            -- minimized, since minimized clients can't have the focus.
+            c.minimized = true
+        end),
+    awful.key({ modkey,           }, "m",
+        function (c)
+            c.maximized_horizontal = not c.maximized_horizontal
+            c.maximized_vertical   = not c.maximized_vertical
+        end)
 )
 
 -- Compute the maximum number of digit we need, limited to 9

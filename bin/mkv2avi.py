@@ -1,6 +1,5 @@
 #!/usr/bin/python
-# Little script to depack Matroska file, and repack them
-# in a AVI + subtitle format.
+#SHA1_Pass
 
 import sys
 import os

@@ -1,7 +1,0 @@
-#!/bin/bash
-hours=$(($1*3600))
-minutes=$(($2*60))
-total=$(($hours+$minutes))
-sleep "$total"
-mplayer ~/nicotine/Alice\ In\ Chains\ -\ Rooster.mp3
-exit 0

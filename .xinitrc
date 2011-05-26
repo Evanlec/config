@@ -36,4 +36,5 @@ urxvtd -q -o -f &
 #xset r rate 250 70 &
 # exec startlxde
 # exec ck-launch-session gnome-session
-exec wmfs
+#exec wmfs
+exec awesome

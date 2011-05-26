@@ -13,7 +13,7 @@ source $HOME/.infinality-settings
 
 export PS1="\[$txtblu\]\u@\h \[\033[36m\]\W \$: \[\033[00m\]"
 
-export CDPATH=.:~:/usr/bin:/bin:/usr/lib/python2.7/site-packages
+export CDPATH=.:~
 
 set show-all-if-ambiguous on
 
@@ -44,7 +44,7 @@ HISTSIZE=1000
 HISTFILESIZE=2000
 export ${!HIST@}
 
-t() {     tmux -L main "${@:-attach}"; }
+t() { tmux -L main "${@:-attach}"; }
 
 sprunge() {
    URI=$(curl -s -F "sprunge=<-" http://sprunge.us)
@@ -53,12 +53,6 @@ sprunge() {
    echo $FLAGS $URI
    echo $URI | xclip -sel clipboard
    echo $URI | xclip -sel primary
-}
-
-svdiff()
-{
-    EDITOR=vimdiff
-    sudoedit $1 $2
 }
 
 psgrep()
